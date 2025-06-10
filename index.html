@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mid D Man Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --royal-blue: #4169e1;
+      --cobal-blue: #0047ab;
+    }
+    
+    /* Global Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, var(--royal-blue), var(--cobal-blue));
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+    
+    header {
+      margin-bottom: 2rem;
+    }
+    
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    p {
+      font-size: 1.25rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .button-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    
+    .btn {
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+      border: 2px solid #fff;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      color: #fff;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.3s;
+    }
+    
+    .btn:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+      transform: scale(1.05);
+    }
+    
+    footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome to My Portfolio</h1>
+    <p>
+      Discover my projects, designs, and experiments. Use the links below to explore my work.
+    </p>
+  </header>
+  
+  <main>
+    <div class="button-container">
+      <a class="btn" href="https://mid-d-man.github.io/AirCode/">AirCode Project</a>
+      <!-- Add more buttons linking to your other pages -->
+      <a class="btn" href="https://github.com/mid-d-man">GitHub</a>
+      <a class="btn" href="https://linkedin.com/in/mid-d-man">LinkedIn</a>
+    </div>
+  </main>
+  
+  <footer>
+    &copy; 2025 Mid D Man. All rights reserved.
+  </footer>
+</body>
+</html>
