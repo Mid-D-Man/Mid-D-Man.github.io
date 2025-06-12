@@ -110,7 +110,7 @@
         </a>
         <br>
         <h3>✈️ AirCode Platform</h3>
-        <p>Interactive learning platform with gamified elements</p>
+        <p>Higher institution QR-Code based attendance tracking application</p>
         <img src="https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white" alt="C#" />
         <img src="https://img.shields.io/badge/Blazor-512BD4?style=for-the-badge&logo=blazor&logoColor=white" alt="Blazor" />
       </td>
