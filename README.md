@@ -2,7 +2,7 @@
 
 <div align="center">
   
-  <!-- Animated gradient banner -->
+  <!-- Animated gradient banner, we need to make our logo boy this shit is za heat 🔥🔥🔥 -->
   <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20,24,33&height=200&section=header&text=MidManStudio&fontSize=60&fontAlign=50&fontAlignY=35&desc=Bridging%20the%20Gap%20Between%20Vision%20and%20Reality&descAlign=50&descAlignY=55&animation=twinkling" alt="MidManStudio Banner" />
   
   <!-- Typing animation -->
@@ -163,6 +163,37 @@
   
   <br><br>
   
+  <!-- ASCII Game Console -->
+  <pre>
+  ╔══════════════════════════════════════════════════════════════╗
+  ║                    🎮 MIDMANSTUDIO ARCADE 🎮                 ║
+  ╠══════════════════════════════════════════════════════════════╣
+  ║                                                              ║
+  ║    ████   ████  ███████  ████████  ████████  ██████          ║
+  ║   ██  ██ ██  ██ ██       ██     ██ ██       ██    ██         ║
+  ║  ████████ ██████ █████    ████████  █████    ████████         ║
+  ║ ██      ██     ██ ██       ██   ██  ██       ██    ██         ║
+  ║██        ██     ██ ███████  ██    ██ ████████ ██    ██         ║
+  ║                                                              ║
+  ║              ┌─────────────────────────────┐                 ║
+  ║              │   🏆 HIGH SCORES 🏆        │                 ║
+  ║              │                            │                 ║
+  ║              │  COMMITS: ████████████     │                 ║
+  ║              │  REPOS: ██████████         │                 ║
+  ║              │  STARS: ████████           │                 ║
+  ║              │  FORKS: ██████             │                 ║
+  ║              │                            │                 ║
+  ║              │  STATUS: 🟢 ONLINE         │                 ║
+  ║              │  LEVEL: 🎯 GAME DEV EXPERT │                 ║
+  ║              └─────────────────────────────┘                 ║
+  ║                                                              ║
+  ║    [PRESS ⭐ TO CONTINUE]  [PRESS 🍴 TO FORK]               ║
+  ║                                                              ║
+  ╚══════════════════════════════════════════════════════════════╝
+  </pre>
+  
+  <br><br>
+  
   <!-- Custom game-style progress bars -->
   <table align="center">
     <tr>
@@ -216,17 +247,48 @@
   
   <br>
   
-  <!-- Game-themed quote -->
-  <blockquote>
-    <h3>🎮 "Every great game starts with a simple idea and the courage to make it real."</h3>
-    <p><em>— MidManStudio Philosophy</em></p>
-  </blockquote>
+  <!-- Game-themed quote with ASCII art -->
+  <pre>
+  ╔════════════════════════════════════════════════════════════╗
+  ║  🎮 "Every great game starts with a simple idea and the    ║
+  ║      courage to make it real."                             ║
+  ║                                                            ║
+  ║      ██████                           ████████             ║
+  ║     ██    ██ ████████  ████████      ██      ██            ║
+  ║    ██        ██    ██ ██      ██    ████████████            ║
+  ║   ██  █████  ████████ ████████      ██      ██             ║
+  ║  ██      ██  ██    ██ ██      ██     ██████ ██             ║
+  ║ ██████████   ██    ██ ██      ██            ██             ║
+  ║                                        ████████            ║
+  ║                                                            ║
+  ║             — MidManStudio Philosophy                      ║
+  ╚════════════════════════════════════════════════════════════╝
+  </pre>
   
   <br>
   
-  <!-- Visitor Counter with game theme -->
+  <!-- Visitor Counter with retro game theme -->
   <img src="https://visitcount.itsvg.in/api?id=mid-d-man&icon=5&color=12" alt="Players Visited" />
-  <p><em>🎯 Ready to level up your project? Let's create something extraordinary!</em></p>
+  
+  <!-- ASCII Game Over Screen -->
+  <pre>
+  ╭─────────────────────────────────────────╮
+  │                                         │
+  │    🕹️  READY PLAYER ONE? 🕹️           │
+  │                                         │
+  │    ████████ ████████ ████████ ████████  │
+  │    ██       ██    ██ ██    ██ ██        │
+  │    ████████ ████████ ████████ ████████  │
+  │    ██       ██       ██       ██        │
+  │    ████████ ██       ██       ████████  │
+  │                                         │
+  │         LEVEL UP YOUR PROJECT?          │
+  │         LET'S CREATE MAGIC! ✨          │
+  │                                         │
+  │    INSERT COIN (⭐) TO CONTINUE...      │
+  │                                         │
+  ╰─────────────────────────────────────────╯
+  </pre>
   
 </div>
 
