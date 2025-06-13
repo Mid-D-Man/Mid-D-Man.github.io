@@ -1,101 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Testing stuff</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --royal-blue: #4169e1;
-      --cobal-blue: #0047ab;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MidManStudio - Bridging Vision and Reality</title>
+    <meta name="description" content="MidManStudio specializes in game development, web development, software solutions, and digital art. We bridge the gap between vision and reality.">
     
-    /* Global Styles */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, var(--royal-blue), var(--cobal-blue));
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-    }
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    header {
-      margin-bottom: 2rem;
-    }
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/colors.css">
+    <link rel="stylesheet" href="css/responsive.css">
     
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    }
-    
-    p {
-      font-size: 1.25rem;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    
-    .button-container {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 2rem;
-    }
-    
-    .btn {
-      background-color: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(4px);
-      border: 2px solid #fff;
-      border-radius: 8px;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      color: #fff;
-      text-decoration: none;
-      transition: background 0.3s, transform 0.3s;
-    }
-    
-    .btn:hover {
-      background-color: rgba(255, 255, 255, 0.4);
-      transform: scale(1.05);
-    }
-    
-    footer {
-      position: fixed;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      font-size: 0.9rem;
-      opacity: 0.8;
-    }
-  </style>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-  <header>
-    <h1>Testing stuff here as well...</h1>
-    <p>
-      Discover our projects, designs, and experiments. Use the links below to explore my work why .
-    </p>
-  </header>
-  
-  <main>
-    <div class="button-container">
-      <a class="btn" href="https://mid-d-man.github.io/AirCode/">AirCode Project</a>
-      <!-- Add more buttons linking to your other pages -->
-      <a class="btn" href="https://github.com/mid-d-man">GitHub</a>
-      <a class="btn" href="https://linkedin.com/in/mid-d-man">LinkedIn</a>
+    <!-- Background Effects -->
+    <div class="bg-effects">
+        <div class="floating-particles"></div>
+        <div class="grid-overlay"></div>
     </div>
-  </main>
-  
-  <footer>
-    &copy; 2025 Mid D Man. All rights reserved.
-  </footer>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">MidManStudio</span>
+                <span class="logo-tagline">Vision → Reality</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="title-line">Welcome to</span>
+                    <span class="title-main">MidManStudio</span>
+                    <span class="title-sub">Bridging the Gap Between Vision and Reality</span>
+                </h1>
+                <p class="hero-description">
+                    We specialize in game development, creating immersive experiences with Unity. 
+                    From interactive games to web applications and digital art, we transform your wildest ideas into reality.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">View Our Games</a>
+                    <a href="#contact" class="btn btn-secondary">Start a Project</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-icon game-controller"></div>
+                <div class="floating-icon code-bracket"></div>
+                <div class="floating-icon design-brush"></div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">Our Expertise</h2>
+            <div class="services-grid">
+                <div class="service-card primary">
+                    <div class="service-icon">🎮</div>
+                    <h3>Game Development</h3>
+                    <p>Creating immersive gaming experiences with Unity and cutting-edge technology. From concept to launch, we bring your game vision to life.</p>
+                    <div class="service-tech">Unity • C# • Game Design</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🌐</div>
+                    <h3>Web Development</h3>
+                    <p>Building responsive, interactive web applications and platforms that engage users and drive results.</p>
+                    <div class="service-tech">Blazor • JavaScript • React</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💻</div>
+                    <h3>Software Development</h3>
+                    <p>Developing robust desktop and mobile applications with modern frameworks and best practices.</p>
+                    <div class="service-tech">C# • .NET • Cross-Platform</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🎨</div>
+                    <h3>Digital Art & Design</h3>
+                    <p>Crafting stunning visuals, game assets, and user interfaces that captivate and inspire.</p>
+                    <div class="service-tech">UI/UX • Game Assets • Branding</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card featured">
+                    <div class="project-image">
+                        <div class="project-overlay">
+                            <div class="project-links">
+                                <a href="https://mid-d-man.github.io/AirCode/" class="project-link">Live Demo</a>
+                                <a href="https://github.com/mid-d-man/AirCode" class="project-link">GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>AirCode Platform</h3>
+                        <p>Higher institution QR-Code based attendance tracking application built with C# and Blazor.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">C#</span>
+                            <span class="tech-tag">Blazor</span>
+                            <span class="tech-tag">QR-Code</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-overlay">
+                            <div class="project-links">
+                                <a href="https://github.com/mid-d-man" class="project-link">View Portfolio</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Game Portfolio</h3>
+                        <p>Collection of Unity games and interactive experiences showcasing our game development expertise.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Unity</span>
+                            <span class="tech-tag">C#</span>
+                            <span class="tech-tag">Game Design</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="section-title">About MidManStudio</h2>
+                    <p>We are passionate game developers and digital creators who believe in bridging the gap between vision and reality. Our primary focus is game development, where we create immersive experiences that captivate and engage players.</p>
+                    <p>Beyond games, we excel in web development, software solutions, and digital art, always pushing the boundaries of what's possible with technology and creativity.</p>
+                    <div class="stats">
+                        <div class="stat">
+                            <span class="stat-number">95%</span>
+                            <span class="stat-label">Game Development</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">88%</span>
+                            <span class="stat-label">Software Engineering</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">85%</span>
+                            <span class="stat-label">Digital Art</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="tech-orbit">
+                        <div class="tech-item unity">Unity</div>
+                        <div class="tech-item csharp">C#</div>
+                        <div class="tech-item blazor">Blazor</div>
+                        <div class="tech-item js">JavaScript</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Let's Create Something Amazing</h2>
+            <p class="contact-subtitle">Ready to bridge the gap between your vision and reality?</p>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>contact@midmanstudio.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-links">
+                        <a href="https://github.com/mid-d-man" class="social-link">
+                            <span class="social-icon">⚡</span>
+                            GitHub
+                        </a>
+                        <a href="https://linkedin.com/company/MidManStudio" class="social-link">
+                            <span class="social-icon">💼</span>
+                            LinkedIn
+                        </a>
+                        <a href="https://mid-d-man.github.io" class="social-link">
+                            <span class="social-icon">🎮</span>
+                            Portfolio
+                        </a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <select id="service" name="service" required>
+                                <option value="">Select Service</option>
+                                <option value="game-dev">Game Development</option>
+                                <option value="web-dev">Web Development</option>
+                                <option value="software-dev">Software Development</option>
+                                <option value="digital-art">Digital Art & Design</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" placeholder="Tell us about your project..." rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>MidManStudio</h3>
+                    <p>"Every great game starts with a simple idea and the courage to make it real."</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-section">
+                        <h4>Services</h4>
+                        <a href="#services">Game Development</a>
+                        <a href="#services">Web Development</a>
+                        <a href="#services">Software Development</a>
+                        <a href="#services">Digital Art</a>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Projects</h4>
+                        <a href="https://mid-d-man.github.io/AirCode/">AirCode Platform</a>
+                        <a href="https://github.com/mid-d-man">Game Portfolio</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 MidManStudio. All rights reserved. Bridging the gap between vision and reality.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/responsive.js"></script>
 </body>
 </html>
