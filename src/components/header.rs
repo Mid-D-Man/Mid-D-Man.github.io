@@ -2,8 +2,8 @@ use leptos::prelude::*;
 
 #[component]
 pub fn Header() -> impl IntoView {
-    let (nav_open, set_nav_open) = create_signal(false);
-    let (is_scrolled, set_is_scrolled) = create_signal(false);
+    let (nav_open, set_nav_open) = signal(false);
+    let (is_scrolled, set_is_scrolled) = signal(false);
     
     // Handle smooth scrolling to sections
     let scroll_to_section = move |section_id: &str| {
@@ -22,7 +22,7 @@ pub fn Header() -> impl IntoView {
     };
 
     // Handle scroll effect for navbar
-    create_effect(move |_| {
+    Effect::new(move |_| {
         if let Some(window) = web_sys::window() {
             let closure = wasm_bindgen::closure::Closure::wrap(Box::new(move || {
                 let scroll_y = window.page_y_offset().unwrap_or(0.0);
@@ -60,4 +60,4 @@ pub fn Header() -> impl IntoView {
             </div>
         </nav>
     }
-}
+    }
