@@ -1,22 +1,53 @@
 use leptos::*;
+use web_sys::ScrollBehavior;
 
 #[component]
 pub fn Header() -> impl IntoView {
     let (nav_open, set_nav_open) = create_signal(false);
+    let (is_scrolled, set_is_scrolled) = create_signal(false);
+    
+    // Handle smooth scrolling to sections
+    let scroll_to_section = move |section_id: &str| {
+        // Close mobile menu
+        set_nav_open.set(false);
+        
+        if let Some(window) = web_sys::window() {
+            if let Some(document) = window.document() {
+                if let Some(element) = document.get_element_by_id(section_id) {
+                    element.scroll_into_view_with_scroll_into_view_options(
+                        web_sys::ScrollIntoViewOptions::new().behavior(ScrollBehavior::Smooth)
+                    );
+                }
+            }
+        }
+    };
+
+    // Handle scroll effect for navbar
+    create_effect(move |_| {
+        if let Some(window) = web_sys::window() {
+            let closure = wasm_bindgen::closure::Closure::wrap(Box::new(move || {
+                let scroll_y = window.page_y_offset().unwrap_or(0.0);
+                set_is_scrolled.set(scroll_y > 100.0);
+            }) as Box<dyn Fn()>);
+            
+            let _ = window.add_event_listener_with_callback("scroll", closure.as_ref().unchecked_ref());
+            closure.forget();
+        }
+    });
     
     view! {
-        <nav class="navbar" class:scrolled=move || false>
+        <nav class="navbar" class:scrolled=is_scrolled>
             <div class="nav-container">
-                <div class="nav-logo">
+                <div class="nav-logo" on:click=move |_| scroll_to_section("home")>
                     <span class="logo-text">"MidManStudio"</span>
                     <span class="logo-tagline">"Vision → Reality"</span>
                 </div>
                 <div class="nav-menu" class:active=nav_open>
-                    <a href="#home" class="nav-link">"Home"</a>
-                    <a href="#services" class="nav-link">"Services"</a>
-                    <a href="#projects" class="nav-link">"Projects"</a>
-                    <a href="#about" class="nav-link">"About"</a>
-                    <a href="#contact" class="nav-link">"Contact"</a>
+                    <a href="#home" class="nav-link" on:click=move |_| scroll_to_section("home")>"Home"</a>
+                    <a href="#services" class="nav-link" on:click=move |_| scroll_to_section("services")>"Services"</a>
+                    <a href="#projects" class="nav-link" on:click=move |_| scroll_to_section("projects")>"Projects"</a>
+                    <a href="#about" class="nav-link" on:click=move |_| scroll_to_section("about")>"About"</a>
+                    <a href="#contact" class="nav-link" on:click=move |_| scroll_to_section("contact")>"Contact"</a>
                 </div>
                 <div 
                     class="nav-toggle" 
@@ -30,4 +61,4 @@ pub fn Header() -> impl IntoView {
             </div>
         </nav>
     }
-      }
+        }
