@@ -1,4 +1,4 @@
-use leptos::*;
+use leptos::prelude::*;
 
 #[component]
 pub fn About() -> impl IntoView {
@@ -43,4 +43,4 @@ pub fn About() -> impl IntoView {
             </div>
         </section>
     }
-  }
+    }
