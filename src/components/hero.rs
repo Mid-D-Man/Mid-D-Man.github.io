@@ -1,7 +1,20 @@
 use leptos::*;
+use web_sys::ScrollBehavior;
 
 #[component]
 pub fn Hero() -> impl IntoView {
+    let scroll_to_section = move |section_id: &str| {
+        if let Some(window) = web_sys::window() {
+            if let Some(document) = window.document() {
+                if let Some(element) = document.get_element_by_id(section_id) {
+                    element.scroll_into_view_with_scroll_into_view_options(
+                        web_sys::ScrollIntoViewOptions::new().behavior(ScrollBehavior::Smooth)
+                    );
+                }
+            }
+        }
+    };
+
     view! {
         <section id="home" class="hero">
             <div class="hero-content">
@@ -16,8 +29,18 @@ pub fn Hero() -> impl IntoView {
                         From interactive games to web applications and digital art, we transform your wildest ideas into reality."
                     </p>
                     <div class="hero-buttons">
-                        <a href="#projects" class="btn btn-primary">"View Our Games"</a>
-                        <a href="#contact" class="btn btn-secondary">"Start a Project"</a>
+                        <button 
+                            class="btn btn-primary"
+                            on:click=move |_| scroll_to_section("projects")
+                        >
+                            "View Our Games"
+                        </button>
+                        <button 
+                            class="btn btn-secondary"
+                            on:click=move |_| scroll_to_section("contact")
+                        >
+                            "Start a Project"
+                        </button>
                     </div>
                 </div>
                 <div class="hero-visual">
@@ -26,9 +49,9 @@ pub fn Hero() -> impl IntoView {
                     <div class="floating-icon design-brush"></div>
                 </div>
             </div>
-            <div class="scroll-indicator">
+            <div class="scroll-indicator" on:click=move |_| scroll_to_section("services")>
                 <div class="scroll-arrow"></div>
             </div>
         </section>
     }
-}
+            }
