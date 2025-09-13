@@ -1,4 +1,4 @@
-use leptos::*;
+use leptos::prelude::*;
 
 pub mod app;
 pub mod components;
