@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use leptos::task::spawn_local;
 
 #[component]
 pub fn Contact() -> impl IntoView {
@@ -15,22 +16,51 @@ pub fn Contact() -> impl IntoView {
         set_is_submitting.set(true);
         set_submit_status.set(Some("Sending message...".to_string()));
         
-        // Simulate form submission with setTimeout equivalent
-        spawn_local(async move {
-            gloo_timers::future::TimeoutFuture::new(2000).await;
-            set_submit_status.set(Some("✓ Message Sent Successfully!".to_string()));
-            set_is_submitting.set(false);
+        // Use setTimeout with web-sys instead of spawn_local
+        let window = web_sys::window().unwrap();
+        let closure = wasm_bindgen::closure::Closure::wrap(Box::new({
+            let set_submit_status = set_submit_status.clone();
+            let set_is_submitting = set_is_submitting.clone();
+            let set_name = set_name.clone();
+            let set_email = set_email.clone();
+            let set_service = set_service.clone();
+            let set_message = set_message.clone();
             
-            // Reset form after success
-            spawn_local(async move {
-                gloo_timers::future::TimeoutFuture::new(3000).await;
-                set_name.set(String::new());
-                set_email.set(String::new());
-                set_service.set(String::new());
-                set_message.set(String::new());
-                set_submit_status.set(None);
-            });
-        });
+            move || {
+                set_submit_status.set(Some("✓ Message Sent Successfully!".to_string()));
+                set_is_submitting.set(false);
+                
+                // Reset form after 3 seconds
+                let window = web_sys::window().unwrap();
+                let reset_closure = wasm_bindgen::closure::Closure::wrap(Box::new({
+                    let set_name = set_name.clone();
+                    let set_email = set_email.clone();
+                    let set_service = set_service.clone();
+                    let set_message = set_message.clone();
+                    let set_submit_status = set_submit_status.clone();
+                    
+                    move || {
+                        set_name.set(String::new());
+                        set_email.set(String::new());
+                        set_service.set(String::new());
+                        set_message.set(String::new());
+                        set_submit_status.set(None);
+                    }
+                }) as Box<dyn Fn()>);
+                
+                let _ = window.set_timeout_with_callback_and_timeout_and_arguments_0(
+                    reset_closure.as_ref().unchecked_ref(),
+                    3000,
+                );
+                reset_closure.forget();
+            }
+        }) as Box<dyn Fn()>);
+        
+        let _ = window.set_timeout_with_callback_and_timeout_and_arguments_0(
+            closure.as_ref().unchecked_ref(),
+            2000,
+        );
+        closure.forget();
     };
 
     view! {
@@ -125,4 +155,4 @@ pub fn Contact() -> impl IntoView {
             </div>
         </section>
     }
-    }
+                                                                                  }
