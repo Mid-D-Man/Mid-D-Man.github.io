@@ -50,23 +50,25 @@ pub fn Projects() -> impl IntoView {
                                 <div class="project-image">
                                     <div class="project-overlay">
                                         <div class="project-links">
-                                            {if let Some(live_url) = project.live_url {
-                                                view! {
+                                            {match project.live_url {
+                                                Some(live_url) => view! {
                                                     <a href=live_url class="project-link" target="_blank" rel="noopener">
                                                         "Live Demo"
                                                     </a>
-                                                }.into_view()
-                                            } else {
-                                                view! { <span></span> }.into_view()
+                                                }.into_any(),
+                                                None => view! {
+                                                    <span class="project-link disabled">"Coming Soon"</span>
+                                                }.into_any(),
                                             }}
-                                            {if let Some(github_url) = project.github_url {
-                                                view! {
+                                            {match project.github_url {
+                                                Some(github_url) => view! {
                                                     <a href=github_url class="project-link" target="_blank" rel="noopener">
                                                         "GitHub"
                                                     </a>
-                                                }.into_view()
-                                            } else {
-                                                view! { <span></span> }.into_view()
+                                                }.into_any(),
+                                                None => view! {
+                                                    <span class="project-link disabled">"Private"</span>
+                                                }.into_any(),
                                             }}
                                         </div>
                                     </div>
@@ -89,4 +91,4 @@ pub fn Projects() -> impl IntoView {
             </div>
         </section>
     }
-        }
+                        }
