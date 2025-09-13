@@ -1,46 +1,12 @@
 [build]
 target = "index.html"
 dist = "dist"
-public_url = "/"
-
-# Copy static assets
-[[build.hooks]]
-stage = "pre_build"
-command = "mkdir"
-command_arguments = ["-p", "dist/styles", "dist/js", "dist/icons", "dist/assets"]
-
-[[build.hooks]]
-stage = "pre_build"
-command = "cp"
-command_arguments = ["-r", "styles/", "dist/"]
-
-[[build.hooks]]
-stage = "pre_build"
-command = "cp"
-command_arguments = ["manifest.json", "dist/"]
-
-# Copy JavaScript files if they exist
-[[build.hooks]]
-stage = "pre_build"
-command = "sh"
-command_arguments = ["-c", "[ -d js ] && cp -r js/ dist/ || echo 'No js directory found'"]
-
-# Copy favicon and other assets
-[[build.hooks]]
-stage = "pre_build"
-command = "sh"
-command_arguments = ["-c", "[ -f favicon.ico ] && cp favicon.ico dist/ || echo 'No favicon found'"]
 
 [watch]
-watch = ["src", "styles", "index.html", "manifest.json"]
+watch = ["src", "styles"]
 ignore = ["dist", "target"]
 
 [serve]
 address = "127.0.0.1"
 port = 8080
 open = true
-no_autoreload = false
-
-# Enable optimizations for release builds
-[build.release]
-minify = "on_output"
