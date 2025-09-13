@@ -1,5 +1,4 @@
-use leptos::*;
-use web_sys::ScrollBehavior;
+use leptos::prelude::*;
 
 #[component]
 pub fn Hero() -> impl IntoView {
@@ -7,9 +6,9 @@ pub fn Hero() -> impl IntoView {
         if let Some(window) = web_sys::window() {
             if let Some(document) = window.document() {
                 if let Some(element) = document.get_element_by_id(section_id) {
-                    element.scroll_into_view_with_scroll_into_view_options(
-                        web_sys::ScrollIntoViewOptions::new().behavior(ScrollBehavior::Smooth)
-                    );
+                    let mut options = web_sys::ScrollIntoViewOptions::new();
+                    options.set_behavior(web_sys::ScrollBehavior::Smooth);
+                    element.scroll_into_view_with_scroll_into_view_options(&options);
                 }
             }
         }
@@ -54,4 +53,4 @@ pub fn Hero() -> impl IntoView {
             </div>
         </section>
     }
-            }
+        }
