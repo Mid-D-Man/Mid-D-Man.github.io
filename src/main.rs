@@ -1,4 +1,4 @@
-use leptos::*;
+use leptos::prelude::*;
 use midmanstudio::App;
 
 fn main() {
@@ -9,4 +9,4 @@ fn main() {
             <App/>
         }
     })
-      }
+}
