@@ -3,19 +3,6 @@ use crate::components::*;
 
 #[component]
 pub fn App() -> impl IntoView {
-    // Add smooth scrolling functionality
-    let scroll_to_section = move |section_id: &str| {
-        if let Some(window) = web_sys::window() {
-            if let Some(document) = window.document() {
-                if let Some(element) = document.get_element_by_id(section_id) {
-                    let mut options = web_sys::ScrollIntoViewOptions::new();
-                    options.set_behavior(web_sys::ScrollBehavior::Smooth);
-                    element.scroll_into_view_with_scroll_into_view_options(&options);
-                }
-            }
-        }
-    };
-
     view! {
         <div class="app">
             // Background Effects
@@ -41,7 +28,7 @@ fn Footer() -> impl IntoView {
         if let Some(window) = web_sys::window() {
             if let Some(document) = window.document() {
                 if let Some(element) = document.get_element_by_id(section_id) {
-                    let mut options = web_sys::ScrollIntoViewOptions::new();
+                    let options = web_sys::ScrollIntoViewOptions::new();
                     options.set_behavior(web_sys::ScrollBehavior::Smooth);
                     element.scroll_into_view_with_scroll_into_view_options(&options);
                 }
@@ -78,4 +65,4 @@ fn Footer() -> impl IntoView {
             </div>
         </footer>
     }
-        }
+    }
