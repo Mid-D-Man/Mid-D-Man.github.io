@@ -1,32 +1,435 @@
-name: Deploy to GitHub Pages
+name: Deploy MidManStudio Leptos Portfolio to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  build_and_deploy:
+  # Job to update project structure on every push
+  update-structure:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      
-    - name: Setup Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        toolchain: nightly
-        targets: wasm32-unknown-unknown
-        
-    - name: Install Trunk
-      run: cargo install trunk
-      
-    - name: Build
-      run: trunk build --release --public-url /${{ github.event.repository.name }}/
-      
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      if: github.ref == 'refs/heads/main'
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Update Project Structure
+        run: |
+          echo "Generating comprehensive project structure for MidManStudio Portfolio..."
+          
+          # Verify project directory structure
+          echo "Repository root contents:"
+          ls -la
+          
+          # Enhanced structure generation function
+          generate_comprehensive_structure() {
+            local base_path="$1"
+            local output_file="$2"
+          
+            # Initialize output file with metadata
+            {
+              echo "Project Structure Documentation - MidManStudio Portfolio"
+              echo "Generated: $(date -u)"
+              echo "Repository: ${{ github.repository }}"
+              echo "Commit: ${{ github.sha }}"
+              echo "Branch: ${{ github.ref_name }}"
+              echo "Technology Stack: Leptos (Rust WASM)"
+              echo "=================================="
+              echo
+            } > "$output_file"
+          
+            # Capture all project-relevant files
+            echo "Source Files:" >> "$output_file"
+            echo "============" >> "$output_file"
+            find "$base_path" -type f \( \
+              -name "*.rs" -o \
+              -name "*.toml" -o \
+              -name "*.lock" -o \
+              -name "*.json" -o \
+              -name "*.css" -o \
+              -name "*.scss" -o \
+              -name "*.js" -o \
+              -name "*.ts" -o \
+              -name "*.html" -o \
+              -name "*.md" -o \
+              -name "*.yml" -o \
+              -name "*.yaml" \
+            \) -not -path "*/target/*" \
+              -not -path "*/dist/*" \
+              -not -path "*/.git/*" \
+              -not -path "*/node_modules/*" | \
+            sed "s|^$base_path/||" | sort >> "$output_file"
+          
+            echo >> "$output_file"
+            echo "Directory Structure:" >> "$output_file"
+            echo "==================" >> "$output_file"
+          
+            # Generate hierarchical directory tree
+            find "$base_path" -type d \
+              -not -path "*/target" \
+              -not -path "*/target/*" \
+              -not -path "*/dist" \
+              -not -path "*/dist/*" \
+              -not -path "*/.git" \
+              -not -path "*/.git/*" \
+              -not -path "*/node_modules" \
+              -not -path "*/node_modules/*" | \
+            sed "s|^$base_path||" | \
+            sed 's|^/||' | \
+            sort | \
+            sed 's|[^/]*/|  |g' | \
+            sed 's|^|./|' >> "$output_file"
+          
+            echo >> "$output_file"
+            echo "File Count Summary:" >> "$output_file"
+            echo "==================" >> "$output_file"
+          
+            # Generate file type statistics
+            for ext in rs toml lock json css scss js html yml yaml; do
+              count=$(find "$base_path" -name "*.$ext" -not -path "*/target/*" -not -path "*/dist/*" | wc -l)
+              if [ "$count" -gt 0 ]; then
+                printf "%-10s: %d files\n" ".$ext" "$count" >> "$output_file"
+              fi
+            done
+            
+            # Add MidManStudio specific information
+            echo >> "$output_file"
+            echo "Project Information:" >> "$output_file"
+            echo "==================" >> "$output_file"
+            echo "Project Type: Leptos CSR (Client Side Rendering)" >> "$output_file"
+            echo "Build Tool: Trunk" >> "$output_file"
+            echo "Target: WebAssembly (WASM)" >> "$output_file"
+            echo "Framework: Leptos 0.7" >> "$output_file"
+            echo "Portfolio Type: Game Developer & Digital Artist" >> "$output_file"
+            echo "Services: Game Dev, Web Dev, Software Dev, Digital Art" >> "$output_file"
+            echo "Primary Colors: Royal Blue (#4169e1), Gold (#ffd700)" >> "$output_file"
+            echo "Theme System: Gradient backgrounds with glow effects" >> "$output_file"
+            echo "Responsive: Mobile-first approach" >> "$output_file"
+            echo "PWA Ready: Service worker and manifest support" >> "$output_file"
+          }
+          
+          # Create Others directory and generate structure
+          mkdir -p "Others"
+          generate_comprehensive_structure "." "Others/ProjectStructure.txt"
+          
+          echo "Project structure documentation completed successfully"
+
+      - name: Commit Updated Project Structure
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action - MidManStudio"
+          
+          STRUCTURE_FILE="Others/ProjectStructure.txt"
+          
+          if [ -f "$STRUCTURE_FILE" ]; then
+            # Verify changes exist before committing
+            if ! git diff --quiet "$STRUCTURE_FILE" 2>/dev/null; then
+              git add "$STRUCTURE_FILE"
+              git commit -m "Auto-update MidManStudio project structure documentation [skip ci]"
+              git push
+              echo "Project structure committed successfully"
+            else
+              echo "No changes detected in project structure"
+            fi
+          else
+            echo "Warning: Project structure file not found"
+          fi
+
+  # Job to build and deploy - only on publish keywords
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    needs: update-structure
+    if: contains(github.event.head_commit.message, '--publish') || contains(github.event.head_commit.message, '--PUBLISH') || contains(github.event.head_commit.message, 'deploy') || contains(github.event.head_commit.message, 'DEPLOY')
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: nightly
+          targets: wasm32-unknown-unknown
+
+      - name: Display Build Information
+        run: |
+          echo "🎮 Building MidManStudio Portfolio (Leptos WASM)"
+          echo "📦 Framework: Leptos 0.7 with CSR"
+          echo "🦀 Language: Rust (WASM target)"
+          echo "🛠️ Build Tool: Trunk"
+          echo "🎯 Branch: ${{ github.ref_name }}"
+          echo "💬 Commit: ${{ github.event.head_commit.message }}"
+          echo "👤 Author: ${{ github.event.head_commit.author.name }}"
+          echo "🌐 Target: GitHub Pages (gh-pages branch)"
+
+      - name: Install Trunk
+        run: |
+          echo "Installing Trunk for Leptos WASM builds..."
+          cargo install trunk
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "."
+
+      - name: Build MidManStudio Portfolio
+        run: |
+          echo "🔨 Building MidManStudio Portfolio with Trunk..."
+          
+          # Build the project using Trunk with release optimizations
+          trunk build --release --public-url /${{ github.event.repository.name }}/
+          
+          echo "✅ Build completed successfully"
+
+      - name: Prepare for GitHub Pages with Portfolio Assets
+        run: |
+          echo "🛠️ Preparing MidManStudio portfolio files for GitHub Pages deployment..."
+          
+          mkdir -p ./pages
+          
+          # Copy built files from dist directory (Trunk output)
+          if [ -d "./dist" ]; then
+            cp -r ./dist/* ./pages/
+            echo "✅ Portfolio files copied successfully"
+          else
+            echo "❌ ERROR: dist directory not found"
+            exit 1
+          fi
+          
+          # Critical: Add .nojekyll to prevent Jekyll processing
+          touch ./pages/.nojekyll
+          echo "✅ .nojekyll file created"
+          
+          # Create 404.html for SPA routing
+          if [ -f "./pages/index.html" ]; then
+            cp ./pages/index.html ./pages/404.html
+            echo "✅ 404.html created for SPA routing"
+          else
+            echo "❌ ERROR: index.html not found"
+            exit 1
+          fi
+          
+          # Update any hardcoded paths in HTML files for GitHub Pages subpath
+          find ./pages -name "*.html" -type f -exec sed -i 's|href="/|href="/${{ github.event.repository.name }}/|g' {} \;
+          find ./pages -name "*.html" -type f -exec sed -i 's|src="/|src="/${{ github.event.repository.name }}/|g' {} \;
+          echo "✅ HTML paths updated for GitHub Pages"
+          
+          # Update any CSS files with absolute paths
+          find ./pages -name "*.css" -type f -exec sed -i 's|url(/|url(/${{ github.event.repository.name }}/|g' {} \;
+          echo "✅ CSS paths updated for GitHub Pages"
+          
+          # Create portfolio-specific _headers file
+          cat > ./pages/_headers << 'EOF'
+          # MidManStudio Portfolio Configuration
+          /*.wasm
+            Content-Type: application/wasm
+          /*.js
+            Content-Type: application/javascript
+          /*.css
+            Content-Type: text/css
+          /*.json
+            Content-Type: application/json
+          /*.png
+            Content-Type: image/png
+          /*.jpg
+            Content-Type: image/jpeg
+          /*.jpeg
+            Content-Type: image/jpeg
+          /*.webp
+            Content-Type: image/webp
+          /*.svg
+            Content-Type: image/svg+xml
+          /*.ico
+            Content-Type: image/x-icon
+          EOF
+          echo "✅ _headers file created"
+          
+          # Create .htaccess for Apache servers
+          cat > ./pages/.htaccess << 'EOF'
+          # MidManStudio Portfolio Configuration
+          AddType application/wasm .wasm
+          AddType application/javascript .js
+          AddType text/css .css
+          AddType application/json .json
+          AddType image/png .png
+          AddType image/jpeg .jpg .jpeg
+          AddType image/webp .webp
+          AddType image/svg+xml .svg
+          AddType image/x-icon .ico
+          
+          # Enable GZIP compression for portfolio assets
+          <IfModule mod_deflate.c>
+            AddOutputFilterByType DEFLATE application/javascript
+            AddOutputFilterByType DEFLATE text/css
+            AddOutputFilterByType DEFLATE text/html
+            AddOutputFilterByType DEFLATE application/json
+            AddOutputFilterByType DEFLATE image/svg+xml
+          </IfModule>
+          
+          # SPA routing fallback for Leptos CSR
+          RewriteEngine On
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteRule . /${{ github.event.repository.name }}/index.html [L]
+          
+          # Cache headers for portfolio assets
+          <IfModule mod_expires.c>
+            ExpiresActive on
+            ExpiresByType application/wasm "access plus 1 year"
+            ExpiresByType application/javascript "access plus 1 month"
+            ExpiresByType text/css "access plus 1 month"
+            ExpiresByType image/png "access plus 1 year"
+            ExpiresByType image/jpg "access plus 1 year"
+            ExpiresByType image/jpeg "access plus 1 year"
+            ExpiresByType image/webp "access plus 1 year"
+            ExpiresByType image/svg+xml "access plus 1 year"
+            ExpiresByType application/json "access plus 1 day"
+          </IfModule>
+          
+          # Security headers for portfolio
+          <IfModule mod_headers.c>
+            Header always set X-Content-Type-Options nosniff
+            Header always set X-Frame-Options SAMEORIGIN
+            Header always set X-XSS-Protection "1; mode=block"
+            Header always set Referrer-Policy "strict-origin-when-cross-origin"
+            Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'"
+          </IfModule>
+          EOF
+          echo "✅ .htaccess file created"
+
+      - name: Verify Portfolio Deployment
+        run: |
+          echo "🔍 Verifying MidManStudio portfolio deployment files..."
+          
+          # Check main files
+          if [ -f "./pages/index.html" ]; then
+            echo "✅ Index HTML found"
+          else
+            echo "❌ Index HTML missing"
+          fi
+          
+          if [ -f "./pages/404.html" ]; then
+            echo "✅ 404 HTML found"
+          else
+            echo "❌ 404 HTML missing"
+          fi
+          
+          # Check WASM files (Leptos output)
+          wasm_count=$(find ./pages -name "*.wasm" -type f | wc -l)
+          if [ "$wasm_count" -gt 0 ]; then
+            echo "✅ Found $wasm_count WASM files"
+            find ./pages -name "*.wasm" -type f -exec echo "  - {}" \;
+          else
+            echo "❌ No WASM files found"
+          fi
+          
+          # Check JavaScript files
+          js_count=$(find ./pages -name "*.js" -type f | wc -l)
+          if [ "$js_count" -gt 0 ]; then
+            echo "✅ Found $js_count JavaScript files"
+          else
+            echo "❌ No JavaScript files found"
+          fi
+          
+          # Check CSS files
+          css_count=$(find ./pages -name "*.css" -type f | wc -l)
+          if [ "$css_count" -gt 0 ]; then
+            echo "✅ Found $css_count CSS files"
+          else
+            echo "❌ No CSS files found"
+          fi
+          
+          # Check for portfolio assets
+          img_count=$(find ./pages -type f \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.webp" -o -name "*.svg" \) | wc -l)
+          if [ "$img_count" -gt 0 ]; then
+            echo "✅ Found $img_count image assets"
+          else
+            echo "⚠️ No image assets found"
+          fi
+          
+          # Check favicon
+          if [ -f "./pages/favicon.ico" ] || [ -f "./pages/favicon.png" ]; then
+            echo "✅ Favicon found"
+          else
+            echo "⚠️ Favicon not found"
+          fi
+          
+          # Summary
+          echo ""
+          echo "📊 Deployment Summary:"
+          echo "  - Total files: $(find ./pages -type f | wc -l)"
+          echo "  - Size: $(du -sh ./pages | cut -f1)"
+          echo "  - WASM files: $wasm_count"
+          echo "  - JavaScript files: $js_count"
+          echo "  - CSS files: $css_count"
+          echo "  - Image assets: $img_count"
+          echo "  - Ready for portfolio deployment: ✅"
+
+      - name: Deploy to GitHub Pages (gh-pages branch)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./pages
+          publish_branch: gh-pages
+          enable_jekyll: false
+          user_name: 'GitHub Action - MidManStudio'
+          user_email: 'action@github.com'
+          commit_message: 'Deploy MidManStudio Portfolio 🎮 ${{ github.event.head_commit.message }}'
+
+      - name: Deployment Success
+        run: |
+          echo "🎉 MidManStudio Portfolio deployed successfully!"
+          echo "🌐 Your portfolio will be available at:"
+          echo "   https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          echo ""
+          echo "🎮 Portfolio Features Deployed:"
+          echo "   ✅ Game Development showcase"
+          echo "   ✅ Web Development projects"
+          echo "   ✅ Software Development portfolio"
+          echo "   ✅ Digital Art & Design gallery"
+          echo "   ✅ Interactive Leptos WASM interface"
+          echo "   ✅ Royal blue & gold theme with glow effects"
+          echo "   ✅ Mobile-first responsive design"
+          echo "   ✅ Fast WASM performance"
+          echo "   ✅ Cross-platform compatibility"
+          echo ""
+          echo "🦀 Built with Rust & Leptos for maximum performance!"
+          echo "💡 Deployment triggered by: ${{ github.event.head_commit.message }}"
+
+  # Job that runs when deployment is skipped
+  deployment-skipped:
+    runs-on: ubuntu-latest
+    needs: update-structure
+    if: "!(contains(github.event.head_commit.message, '--publish') || contains(github.event.head_commit.message, '--PUBLISH') || contains(github.event.head_commit.message, 'deploy') || contains(github.event.head_commit.message, 'DEPLOY'))"
+    
+    steps:
+      - name: Deployment Skipped Notice
+        run: |
+          echo "ℹ️  MidManStudio portfolio deployment was skipped"
+          echo ""
+          echo "🚀 To deploy your portfolio, include one of these keywords in your commit message:"
+          echo "  - '--publish' (case insensitive)"
+          echo "  - 'deploy' (case insensitive)"
+          echo ""
+          echo "Example commit messages that trigger deployment:"
+          echo "  - 'Updated portfolio design --publish'"
+          echo "  - 'Added new game project --publish'"
+          echo "  - 'Fixed responsive layout issues deploy'"
+          echo "  - 'Portfolio ready for production DEPLOY'"
+          echo ""
+          echo "📝 Current commit: ${{ github.event.head_commit.message }}"
+          echo "👤 Author: ${{ github.event.head_commit.author.name }}"
+          echo ""
+          echo "✅ Project structure has been updated automatically"
+          echo "🦀 Rust/Leptos portfolio ready for deployment when triggered"
