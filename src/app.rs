@@ -1,4 +1,4 @@
-use leptos::*;
+use leptos::prelude::*;
 use crate::components::*;
 
 #[component]
@@ -8,9 +8,9 @@ pub fn App() -> impl IntoView {
         if let Some(window) = web_sys::window() {
             if let Some(document) = window.document() {
                 if let Some(element) = document.get_element_by_id(section_id) {
-                    element.scroll_into_view_with_scroll_into_view_options(
-                        web_sys::ScrollIntoViewOptions::new().behavior(web_sys::ScrollBehavior::Smooth)
-                    );
+                    let mut options = web_sys::ScrollIntoViewOptions::new();
+                    options.set_behavior(web_sys::ScrollBehavior::Smooth);
+                    element.scroll_into_view_with_scroll_into_view_options(&options);
                 }
             }
         }
@@ -37,6 +37,18 @@ pub fn App() -> impl IntoView {
 
 #[component]
 fn Footer() -> impl IntoView {
+    let scroll_to_section = move |section_id: &str| {
+        if let Some(window) = web_sys::window() {
+            if let Some(document) = window.document() {
+                if let Some(element) = document.get_element_by_id(section_id) {
+                    let mut options = web_sys::ScrollIntoViewOptions::new();
+                    options.set_behavior(web_sys::ScrollBehavior::Smooth);
+                    element.scroll_into_view_with_scroll_into_view_options(&options);
+                }
+            }
+        }
+    };
+
     view! {
         <footer class="footer">
             <div class="container">
@@ -66,4 +78,4 @@ fn Footer() -> impl IntoView {
             </div>
         </footer>
     }
-    }
+        }
