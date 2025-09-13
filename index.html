@@ -9,271 +9,99 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="css/colors.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <!-- CSS Files - Updated paths for Leptos -->
+    <link rel="stylesheet" href="styles/colors.css">
+    <link rel="stylesheet" href="styles/responsive.css">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4169e1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="MidManStudio - Game Development Portfolio">
+    <meta property="og:description" content="Professional game developer specializing in Unity, C#, and interactive experiences. Bridging the gap between vision and reality.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/og-image.png">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MidManStudio - Game Development Portfolio">
+    <meta name="twitter:description" content="Professional game developer specializing in Unity, C#, and interactive experiences.">
+    
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
-    <!-- Background Effects -->
-    <div class="bg-effects">
-        <div class="floating-particles"></div>
-        <div class="grid-overlay"></div>
+    <!-- Leptos will mount the app here -->
+    <div id="leptos"></div>
+    
+    <!-- Loading screen for better UX -->
+    <div id="loading-screen" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #4169e1 0%, #0047ab 50%, #003875 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        font-family: 'Orbitron', monospace;
+        color: #ffd700;
+    ">
+        <div style="text-align: center;">
+            <div style="
+                width: 50px;
+                height: 50px;
+                border: 3px solid rgba(255, 215, 0, 0.3);
+                border-top: 3px solid #ffd700;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin: 0 auto 20px;
+            "></div>
+            <h2 style="margin: 0; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">
+                MidManStudio
+            </h2>
+            <p style="margin: 10px 0 0; opacity: 0.8;">
+                Loading Portfolio...
+            </p>
+        </div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <span class="logo-text">MidManStudio</span>
-                <span class="logo-tagline">Vision → Reality</span>
-            </div>
-            <div class="nav-menu" id="nav-menu">
-                <a href="#home" class="nav-link">Home</a>
-                <a href="#services" class="nav-link">Services</a>
-                <a href="#projects" class="nav-link">Projects</a>
-                <a href="#about" class="nav-link">About</a>
-                <a href="#contact" class="nav-link">Contact</a>
-            </div>
-            <div class="nav-toggle" id="nav-toggle">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-        </div>
-    </nav>
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Hide loading screen after Leptos loads */
+        .leptos-loaded #loading-screen {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-out;
+        }
+    </style>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1 class="hero-title">
-                    <span class="title-line">Welcome to</span>
-                    <span class="title-main">MidManStudio</span>
-                    <span class="title-sub">Bridging the Gap Between Vision and Reality</span>
-                </h1>
-                <p class="hero-description">
-                    We specialize in game development, creating immersive experiences with Unity. 
-                    From interactive games to web applications and digital art, we transform your wildest ideas into reality.
-                </p>
-                <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">View Our Games</a>
-                    <a href="#contact" class="btn btn-secondary">Start a Project</a>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <div class="floating-icon game-controller"></div>
-                <div class="floating-icon code-bracket"></div>
-                <div class="floating-icon design-brush"></div>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <div class="scroll-arrow"></div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="services">
-        <div class="container">
-            <h2 class="section-title">Our Expertise</h2>
-            <div class="services-grid">
-                <div class="service-card primary">
-                    <div class="service-icon">🎮</div>
-                    <h3>Game Development</h3>
-                    <p>Creating immersive gaming experiences with Unity and cutting-edge technology. From concept to launch, we bring your game vision to life.</p>
-                    <div class="service-tech">Unity • C# • Game Design</div>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">🌐</div>
-                    <h3>Web Development</h3>
-                    <p>Building responsive, interactive web applications and platforms that engage users and drive results.</p>
-                    <div class="service-tech">Blazor • JavaScript • React</div>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">💻</div>
-                    <h3>Software Development</h3>
-                    <p>Developing robust desktop and mobile applications with modern frameworks and best practices.</p>
-                    <div class="service-tech">C# • .NET • Cross-Platform</div>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">🎨</div>
-                    <h3>Digital Art & Design</h3>
-                    <p>Crafting stunning visuals, game assets, and user interfaces that captivate and inspire.</p>
-                    <div class="service-tech">UI/UX • Game Assets • Branding</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2 class="section-title">Featured Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card featured">
-                    <div class="project-image">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="https://mid-d-man.github.io/AirCode/" class="project-link">Live Demo</a>
-                                <a href="https://github.com/mid-d-man/AirCode" class="project-link">GitHub</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>AirCode Platform</h3>
-                        <p>Higher institution QR-Code based attendance tracking application built with C# and Blazor.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">C#</span>
-                            <span class="tech-tag">Blazor</span>
-                            <span class="tech-tag">QR-Code</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="https://github.com/mid-d-man" class="project-link">View Portfolio</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>Game Portfolio</h3>
-                        <p>Collection of Unity games and interactive experiences showcasing our game development expertise.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Unity</span>
-                            <span class="tech-tag">C#</span>
-                            <span class="tech-tag">Game Design</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-text">
-                    <h2 class="section-title">About MidManStudio</h2>
-                    <p>We are passionate game developers and digital creators who believe in bridging the gap between vision and reality. Our primary focus is game development, where we create immersive experiences that captivate and engage players.</p>
-                    <p>Beyond games, we excel in web development, software solutions, and digital art, always pushing the boundaries of what's possible with technology and creativity.</p>
-                    <div class="stats">
-                        <div class="stat">
-                            <span class="stat-number">95%</span>
-                            <span class="stat-label">Game Development</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">88%</span>
-                            <span class="stat-label">Software Engineering</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">85%</span>
-                            <span class="stat-label">Digital Art</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="about-visual">
-                    <div class="tech-orbit">
-                        <div class="tech-item unity">Unity</div>
-                        <div class="tech-item csharp">C#</div>
-                        <div class="tech-item blazor">Blazor</div>
-                        <div class="tech-item js">JavaScript</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">Let's Create Something Amazing</h2>
-            <p class="contact-subtitle">Ready to bridge the gap between your vision and reality?</p>
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon">📧</div>
-                        <div>
-                            <h4>Email</h4>
-                            <p>contact@midmanstudio.com</p>
-                        </div>
-                    </div>
-                    <div class="contact-links">
-                        <a href="https://github.com/mid-d-man" class="social-link">
-                            <span class="social-icon">⚡</span>
-                            GitHub
-                        </a>
-                        <a href="https://linkedin.com/company/MidManStudio" class="social-link">
-                            <span class="social-icon">💼</span>
-                            LinkedIn
-                        </a>
-                        <a href="https://mid-d-man.github.io" class="social-link">
-                            <span class="social-icon">🎮</span>
-                            Portfolio
-                        </a>
-                    </div>
-                </div>
-                <div class="contact-form">
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <input type="text" id="name" name="name" placeholder="Your Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="Your Email" required>
-                        </div>
-                        <div class="form-group">
-                            <select id="service" name="service" required>
-                                <option value="">Select Service</option>
-                                <option value="game-dev">Game Development</option>
-                                <option value="web-dev">Web Development</option>
-                                <option value="software-dev">Software Development</option>
-                                <option value="digital-art">Digital Art & Design</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <textarea id="message" name="message" placeholder="Tell us about your project..." rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <h3>MidManStudio</h3>
-                    <p>"Every great game starts with a simple idea and the courage to make it real."</p>
-                </div>
-                <div class="footer-links">
-                    <div class="footer-section">
-                        <h4>Services</h4>
-                        <a href="#services">Game Development</a>
-                        <a href="#services">Web Development</a>
-                        <a href="#services">Software Development</a>
-                        <a href="#services">Digital Art</a>
-                    </div>
-                    <div class="footer-section">
-                        <h4>Projects</h4>
-                        <a href="https://mid-d-man.github.io/AirCode/">AirCode Platform</a>
-                        <a href="https://github.com/mid-d-man">Game Portfolio</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 MidManStudio. All rights reserved. Bridging the gap between vision and reality.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- JavaScript -->
-    <script src="js/responsive.js"></script>
+    <script>
+        // Hide loading screen when Leptos is ready
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.body.classList.add('leptos-loaded');
+                setTimeout(function() {
+                    const loadingScreen = document.getElementById('loading-screen');
+                    if (loadingScreen) {
+                        loadingScreen.remove();
+                    }
+                }, 500);
+            }, 1000);
+        });
+    </script>
 </body>
-</html>
+    </html>
