@@ -3,6 +3,19 @@ use crate::components::*;
 
 #[component]
 pub fn App() -> impl IntoView {
+    // Add smooth scrolling functionality
+    let scroll_to_section = move |section_id: &str| {
+        if let Some(window) = web_sys::window() {
+            if let Some(document) = window.document() {
+                if let Some(element) = document.get_element_by_id(section_id) {
+                    element.scroll_into_view_with_scroll_into_view_options(
+                        web_sys::ScrollIntoViewOptions::new().behavior(web_sys::ScrollBehavior::Smooth)
+                    );
+                }
+            }
+        }
+    };
+
     view! {
         <div class="app">
             // Background Effects
@@ -35,15 +48,15 @@ fn Footer() -> impl IntoView {
                     <div class="footer-links">
                         <div class="footer-section">
                             <h4>"Services"</h4>
-                            <a href="#services">"Game Development"</a>
-                            <a href="#services">"Web Development"</a>
-                            <a href="#services">"Software Development"</a>
-                            <a href="#services">"Digital Art"</a>
+                            <a href="#services" on:click=move |_| scroll_to_section("services")>"Game Development"</a>
+                            <a href="#services" on:click=move |_| scroll_to_section("services")>"Web Development"</a>
+                            <a href="#services" on:click=move |_| scroll_to_section("services")>"Software Development"</a>
+                            <a href="#services" on:click=move |_| scroll_to_section("services")>"Digital Art"</a>
                         </div>
                         <div class="footer-section">
                             <h4>"Projects"</h4>
-                            <a href="https://mid-d-man.github.io/AirCode/">"AirCode Platform"</a>
-                            <a href="https://github.com/mid-d-man">"Game Portfolio"</a>
+                            <a href="https://mid-d-man.github.io/AirCode/" target="_blank" rel="noopener">"AirCode Platform"</a>
+                            <a href="https://github.com/mid-d-man" target="_blank" rel="noopener">"Game Portfolio"</a>
                         </div>
                     </div>
                 </div>
@@ -53,4 +66,4 @@ fn Footer() -> impl IntoView {
             </div>
         </footer>
     }
-      }
+    }
