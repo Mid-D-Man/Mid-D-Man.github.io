@@ -1,4 +1,4 @@
-use leptos::*;
+use leptos::prelude::*;
 
 #[derive(Clone)]
 struct Project {
@@ -89,4 +89,4 @@ pub fn Projects() -> impl IntoView {
             </div>
         </section>
     }
-      }
+        }
