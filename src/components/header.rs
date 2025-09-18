@@ -25,8 +25,9 @@ pub fn Header() -> impl IntoView {
     // Handle scroll effect for navbar
     Effect::new(move |_| {
         if let Some(window) = web_sys::window() {
+            let window_clone = window.clone();
             let closure = wasm_bindgen::closure::Closure::wrap(Box::new(move || {
-                let scroll_y = window.page_y_offset().unwrap_or(0.0);
+                let scroll_y = window_clone.page_y_offset().unwrap_or(0.0);
                 set_is_scrolled.set(scroll_y > 100.0);
             }) as Box<dyn Fn()>);
             
