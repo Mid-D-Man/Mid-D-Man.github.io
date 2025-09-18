@@ -45,7 +45,7 @@ jobs:
               echo "Repository: ${{ github.repository }}"
               echo "Commit: ${{ github.sha }}"
               echo "Branch: ${{ github.ref_name }}"
-              echo "Technology Stack: Leptos (Rust WASM)"
+              echo "Technology Stack: Leptos 0.8 (Rust WASM)"
               echo "=================================="
               echo
             } > "$output_file"
@@ -111,7 +111,7 @@ jobs:
             echo "Project Type: Leptos CSR (Client Side Rendering)" >> "$output_file"
             echo "Build Tool: Trunk" >> "$output_file"
             echo "Target: WebAssembly (WASM)" >> "$output_file"
-            echo "Framework: Leptos 0.7" >> "$output_file"
+            echo "Framework: Leptos 0.8" >> "$output_file"
             echo "Portfolio Type: Game Developer & Digital Artist" >> "$output_file"
             echo "Services: Game Dev, Web Dev, Software Dev, Digital Art" >> "$output_file"
             echo "Primary Colors: Royal Blue (#4169e1), Gold (#ffd700)" >> "$output_file"
@@ -156,7 +156,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Rust
+      - name: Setup Rust (Current Nightly - Leptos 0.8 Compatible)
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: nightly
@@ -164,18 +164,19 @@ jobs:
 
       - name: Display Build Information
         run: |
-          echo "🎮 Building MidManStudio Portfolio (Leptos WASM)"
-          echo "📦 Framework: Leptos 0.7 with CSR"
+          echo "🎮 Building MidManStudio Portfolio (Leptos 0.8 WASM)"
+          echo "📦 Framework: Leptos 0.8.9 with CSR"
           echo "🦀 Language: Rust (WASM target)"
           echo "🛠️ Build Tool: Trunk"
           echo "🎯 Branch: ${{ github.ref_name }}"
           echo "💬 Commit: ${{ github.event.head_commit.message }}"
           echo "👤 Author: ${{ github.event.head_commit.author.name }}"
           echo "🌐 Target: GitHub Pages (gh-pages branch)"
+          echo "🔧 Leptos Version: 0.8 (with const generic fixes)"
 
       - name: Install Trunk
         run: |
-          echo "Installing Trunk for Leptos WASM builds..."
+          echo "Installing Trunk for Leptos 0.8 WASM builds..."
           cargo install trunk
 
       - name: Rust Cache
@@ -185,12 +186,12 @@ jobs:
 
       - name: Build MidManStudio Portfolio
         run: |
-          echo "🔨 Building MidManStudio Portfolio with Trunk..."
+          echo "🔨 Building MidManStudio Portfolio with Trunk and Leptos 0.8..."
           
           # Build the project using Trunk with release optimizations
           trunk build --release --public-url /${{ github.event.repository.name }}/
           
-          echo "✅ Build completed successfully"
+          echo "✅ Build completed successfully with Leptos 0.8"
 
       - name: Prepare for GitHub Pages with Portfolio Assets
         run: |
@@ -367,7 +368,7 @@ jobs:
           
           # Summary
           echo ""
-          echo "📊 Deployment Summary:"
+          echo "📊 Deployment Summary (Leptos 0.8):"
           echo "  - Total files: $(find ./pages -type f | wc -l)"
           echo "  - Size: $(du -sh ./pages | cut -f1)"
           echo "  - WASM files: $wasm_count"
@@ -385,11 +386,11 @@ jobs:
           enable_jekyll: false
           user_name: 'GitHub Action - MidManStudio'
           user_email: 'action@github.com'
-          commit_message: 'Deploy MidManStudio Portfolio 🎮 ${{ github.event.head_commit.message }}'
+          commit_message: 'Deploy MidManStudio Portfolio 🎮 Leptos 0.8 ${{ github.event.head_commit.message }}'
 
       - name: Deployment Success
         run: |
-          echo "🎉 MidManStudio Portfolio deployed successfully!"
+          echo "🎉 MidManStudio Portfolio deployed successfully with Leptos 0.8!"
           echo "🌐 Your portfolio will be available at:"
           echo "   https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
           echo ""
@@ -398,13 +399,14 @@ jobs:
           echo "   ✅ Web Development projects"
           echo "   ✅ Software Development portfolio"
           echo "   ✅ Digital Art & Design gallery"
-          echo "   ✅ Interactive Leptos WASM interface"
+          echo "   ✅ Interactive Leptos 0.8 WASM interface"
           echo "   ✅ Royal blue & gold theme with glow effects"
           echo "   ✅ Mobile-first responsive design"
           echo "   ✅ Fast WASM performance"
           echo "   ✅ Cross-platform compatibility"
+          echo "   ✅ Fixed const generic parameter issues"
           echo ""
-          echo "🦀 Built with Rust & Leptos for maximum performance!"
+          echo "🦀 Built with Rust & Leptos 0.8 for maximum performance!"
           echo "💡 Deployment triggered by: ${{ github.event.head_commit.message }}"
 
   # Job that runs when deployment is skipped
@@ -432,4 +434,4 @@ jobs:
           echo "👤 Author: ${{ github.event.head_commit.author.name }}"
           echo ""
           echo "✅ Project structure has been updated automatically"
-          echo "🦀 Rust/Leptos portfolio ready for deployment when triggered"
+          echo "🦀 Rust/Leptos 0.8 portfolio ready for deployment when triggered"
