@@ -1,6 +1,5 @@
 use leptos::prelude::*;
-// Import from crate root instead of midmanstudio::
-use crate::App;
+use midmanstudio::App;
 
 fn main() {
     console_error_panic_hook::set_once();
