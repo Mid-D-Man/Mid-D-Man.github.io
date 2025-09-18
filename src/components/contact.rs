@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use leptos::task::spawn_local;
+use wasm_bindgen::JsCast;
 
 #[component]
 pub fn Contact() -> impl IntoView {
@@ -155,4 +155,4 @@ pub fn Contact() -> impl IntoView {
             </div>
         </section>
     }
-                                                                                  }
+        }
