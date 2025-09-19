@@ -9,7 +9,7 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- CSS Files - Updated for Trunk -->
+    <!-- CSS Files - Trunk will process these -->
     <link data-trunk rel="css" href="styles/colors.css">
     <link data-trunk rel="css" href="styles/responsive.css">
     
@@ -19,29 +19,23 @@
     <!-- PWA Support -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4169e1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="MidManStudio - Game Development Portfolio">
-    <meta property="og:description" content="Professional game developer specializing in Unity, C#, and interactive experiences. Bridging the gap between vision and reality.">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="assets/og-image.png">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="MidManStudio - Game Development Portfolio">
-    <meta name="twitter:description" content="Professional game developer specializing in Unity, C#, and interactive experiences.">
-    
-    <!-- Performance optimizations -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
-    <!-- Leptos will mount the app here -->
+    <!-- Leptos mount point - must match main.rs mount_to_body -->
     <div id="leptos"></div>
     
-    <!-- Loading screen for better UX -->
+    <!-- CRITICAL: This script tag tells Trunk to inject the WASM bootstrap -->
+    <script type="module">
+        import init from './pkg/midmanstudio.js';
+        
+        async function run() {
+            await init();
+        }
+        
+        run().catch(console.error);
+    </script>
+    
+    <!-- Loading screen -->
     <div id="loading-screen" style="
         position: fixed;
         top: 0;
@@ -81,7 +75,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Hide loading screen after Leptos loads */
         .leptos-loaded #loading-screen {
             opacity: 0;
             pointer-events: none;
@@ -90,8 +83,7 @@
     </style>
 
     <script>
-        // Hide loading screen when Leptos is ready
-        window.addEventListener('load', function() {
+        window.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
                 document.body.classList.add('leptos-loaded');
                 setTimeout(function() {
@@ -100,8 +92,8 @@
                         loadingScreen.remove();
                     }
                 }, 500);
-            }, 1000);
+            }, 2000); // Give WASM more time to load
         });
     </script>
 </body>
-                </html>
+</html>
