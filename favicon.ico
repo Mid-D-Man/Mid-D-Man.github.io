@@ -1,0 +1,27 @@
+#!/bin/bash
+# Create a simple favicon.ico using ImageMagick (if available) or as fallback HTML
+
+if command -v convert &> /dev/null; then
+    # Create a 32x32 blue square with gold "M" if ImageMagick is available
+    convert -size 32x32 xc:"#4169e1" \
+            -fill "#ffd700" \
+            -font "Arial-Bold" \
+            -pointsize 24 \
+            -gravity center \
+            -annotate 0 "M" \
+            favicon.ico
+    echo "Created favicon.ico with ImageMagick"
+else
+    # Create a basic ICO file manually (16x16, 32-bit)
+    # This is a minimal ICO file with a blue pixel
+    echo -ne '\x00\x00\x01\x00\x01\x00\x10\x10\x00\x00\x01\x00\x20\x00\x68\x04\x00\x00\x16\x00\x00\x00\x28\x00\x00\x00\x10\x00\x00\x00\x20\x00\x00\x00\x01\x00\x20\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' > favicon.ico
+    
+    # Fill with blue pixels (simplified)
+    for i in {1..256}; do
+        echo -ne '\x41\x69\xe1\xff' >> favicon.ico
+    done
+    
+    echo "Created basic favicon.ico"
+fi
+
+echo "Favicon created successfully"
