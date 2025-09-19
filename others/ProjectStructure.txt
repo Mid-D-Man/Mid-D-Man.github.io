@@ -1,7 +1,7 @@
 Project Structure Documentation - MidManStudio Portfolio
-Generated: Fri Sep 19 13:13:09 UTC 2025
+Generated: Fri Sep 19 13:14:56 UTC 2025
 Repository: Mid-D-Man/Mid-D-Man.github.io
-Commit: 0f84fedc48805f48c3b50cf0dad0094c2ca1f3b0
+Commit: 9dfca2b1d3441b32392fa175ee6438194125a539
 Branch: main
 Technology Stack: Leptos 0.8 (Rust WASM)
 ==================================
