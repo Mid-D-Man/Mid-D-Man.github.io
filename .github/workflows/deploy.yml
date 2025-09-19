@@ -231,8 +231,9 @@ jobs:
           find ./deployment-ready -name "*.css" -type f -exec sed -i 's|url(/|url(/${{ github.event.repository.name }}/|g' {} \;
           echo "Paths updated for GitHub Pages"
 
+      # UPDATED: Using v4 of upload-artifact
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: portfolio-build
           path: ./deployment-ready/
