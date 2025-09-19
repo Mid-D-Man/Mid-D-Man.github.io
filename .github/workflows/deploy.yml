@@ -1,4 +1,4 @@
-name: Deploy MidManStudio Leptos Portfolio to GitHub Pages
+name: Build and Prepare MidManStudio Portfolio
 
 on:
   push:
@@ -147,16 +147,20 @@ jobs:
             echo "Warning: Project structure file not found"
           fi
 
-  # Job to build and deploy - only on publish keywords
-  build-and-deploy:
+  # Job to build - only on publish keywords
+  build:
     runs-on: ubuntu-latest
     needs: update-structure
     if: contains(github.event.head_commit.message, '--publish') || contains(github.event.head_commit.message, '--PUBLISH') || contains(github.event.head_commit.message, 'deploy') || contains(github.event.head_commit.message, 'DEPLOY')
+    outputs:
+      should_deploy: ${{ steps.check.outputs.should_deploy }}
     
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
+
+      - name: Check Deploy Condition
+        id: check
+        run: echo "should_deploy=true" >> $GITHUB_OUTPUT
 
       - name: Setup Rust (Current Nightly - Leptos 0.8 Compatible)
         uses: dtolnay/rust-toolchain@stable
@@ -173,8 +177,6 @@ jobs:
           echo "Branch: ${{ github.ref_name }}"
           echo "Commit: ${{ github.event.head_commit.message }}"
           echo "Author: ${{ github.event.head_commit.author.name }}"
-          echo "Target: GitHub Pages (gh-pages branch)"
-          echo "Leptos Version: 0.8 (with const generic fixes)"
 
       - name: Install Trunk
         run: |
@@ -195,15 +197,15 @@ jobs:
           
           echo "Build completed successfully with Leptos 0.8"
 
-      - name: Prepare for GitHub Pages with Portfolio Assets
+      - name: Prepare Deployment Artifacts
         run: |
-          echo "Preparing MidManStudio portfolio files for GitHub Pages deployment..."
+          echo "Preparing MidManStudio portfolio files..."
           
-          mkdir -p ./pages
+          mkdir -p ./deployment-ready
           
           # Copy built files from dist directory (Trunk output)
           if [ -d "./dist" ]; then
-            cp -r ./dist/* ./pages/
+            cp -r ./dist/* ./deployment-ready/
             echo "Portfolio files copied successfully"
           else
             echo "ERROR: dist directory not found"
@@ -211,93 +213,54 @@ jobs:
           fi
           
           # Critical: Add .nojekyll to prevent Jekyll processing
-          touch ./pages/.nojekyll
+          touch ./deployment-ready/.nojekyll
           echo ".nojekyll file created"
           
           # Create 404.html for SPA routing
-          if [ -f "./pages/index.html" ]; then
-            cp ./pages/index.html ./pages/404.html
+          if [ -f "./deployment-ready/index.html" ]; then
+            cp ./deployment-ready/index.html ./deployment-ready/404.html
             echo "404.html created for SPA routing"
           else
             echo "ERROR: index.html not found"
             exit 1
           fi
           
-          # Update any hardcoded paths in HTML files for GitHub Pages subpath
-          find ./pages -name "*.html" -type f -exec sed -i 's|href="/|href="/${{ github.event.repository.name }}/|g' {} \;
-          find ./pages -name "*.html" -type f -exec sed -i 's|src="/|src="/${{ github.event.repository.name }}/|g' {} \;
-          echo "HTML paths updated for GitHub Pages"
-          
-          # Update any CSS files with absolute paths
-          find ./pages -name "*.css" -type f -exec sed -i 's|url(/|url(/${{ github.event.repository.name }}/|g' {} \;
-          echo "CSS paths updated for GitHub Pages"
+          # Update paths for GitHub Pages subpath
+          find ./deployment-ready -name "*.html" -type f -exec sed -i 's|href="/|href="/${{ github.event.repository.name }}/|g' {} \;
+          find ./deployment-ready -name "*.html" -type f -exec sed -i 's|src="/|src="/${{ github.event.repository.name }}/|g' {} \;
+          find ./deployment-ready -name "*.css" -type f -exec sed -i 's|url(/|url(/${{ github.event.repository.name }}/|g' {} \;
+          echo "Paths updated for GitHub Pages"
 
-      - name: Verify Portfolio Deployment
-        run: |
-          echo "Verifying MidManStudio portfolio deployment files..."
-          
-          # Check main files
-          if [ -f "./pages/index.html" ]; then
-            echo "Index HTML found"
-          else
-            echo "Index HTML missing"
-          fi
-          
-          if [ -f "./pages/404.html" ]; then
-            echo "404 HTML found"
-          else
-            echo "404 HTML missing"
-          fi
-          
-          # Check WASM files (Leptos output)
-          wasm_count=$(find ./pages -name "*.wasm" -type f | wc -l)
-          if [ "$wasm_count" -gt 0 ]; then
-            echo "Found $wasm_count WASM files"
-            find ./pages -name "*.wasm" -type f -exec echo "  - {}" \;
-          else
-            echo "No WASM files found"
-          fi
-          
-          # Check JavaScript files
-          js_count=$(find ./pages -name "*.js" -type f | wc -l)
-          if [ "$js_count" -gt 0 ]; then
-            echo "Found $js_count JavaScript files"
-          else
-            echo "No JavaScript files found"
-          fi
-          
-          # Check CSS files
-          css_count=$(find ./pages -name "*.css" -type f | wc -l)
-          if [ "$css_count" -gt 0 ]; then
-            echo "Found $css_count CSS files"
-          else
-            echo "No CSS files found"
-          fi
-          
-          # Summary
-          echo ""
-          echo "Deployment Summary (Leptos 0.8):"
-          echo "  - Total files: $(find ./pages -type f | wc -l)"
-          echo "  - Size: $(du -sh ./pages | cut -f1)"
-          echo "  - WASM files: $wasm_count"
-          echo "  - JavaScript files: $js_count"
-          echo "  - CSS files: $css_count"
-
-      - name: Deploy to GitHub Pages (gh-pages branch)
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./pages
-          publish_branch: gh-pages
-          enable_jekyll: false
-          user_name: 'GitHub Action - MidManStudio'
-          user_email: 'action@github.com'
-          commit_message: 'Deploy MidManStudio Portfolio Leptos 0.8 ${{ github.event.head_commit.message }}'
+          name: portfolio-build
+          path: ./deployment-ready/
+          retention-days: 1
 
-      - name: Deployment Success
+  # Job that runs when deployment is skipped
+  deployment-skipped:
+    runs-on: ubuntu-latest
+    needs: update-structure
+    if: "!(contains(github.event.head_commit.message, '--publish') || contains(github.event.head_commit.message, '--PUBLISH') || contains(github.event.head_commit.message, 'deploy') || contains(github.event.head_commit.message, 'DEPLOY'))"
+    
+    steps:
+      - name: Deployment Skipped Notice
         run: |
-          echo "MidManStudio Portfolio deployed successfully with Leptos 0.8!"
-          echo "Your portfolio will be available at:"
-          echo "   https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
-          echo "Built with Rust & Leptos 0.8 for maximum performance!"
-          echo "Deployment triggered by: ${{ github.event.head_commit.message }}"
+          echo "MidManStudio portfolio deployment was skipped"
+          echo ""
+          echo "To deploy your portfolio, include one of these keywords in your commit message:"
+          echo "  - '--publish' (case insensitive)"
+          echo "  - 'deploy' (case insensitive)"
+          echo ""
+          echo "Example commit messages that trigger deployment:"
+          echo "  - 'Updated portfolio design --publish'"
+          echo "  - 'Added new game project --publish'"
+          echo "  - 'Fixed responsive layout issues deploy'"
+          echo "  - 'Portfolio ready for production DEPLOY'"
+          echo ""
+          echo "Current commit: ${{ github.event.head_commit.message }}"
+          echo "Author: ${{ github.event.head_commit.author.name }}"
+          echo ""
+          echo "Project structure has been updated automatically"
+          echo "Rust/Leptos 0.8 portfolio ready for deployment when triggered"
