@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MidManStudio - Bridging Vision and Reality</title>
+    <meta name="description" content="MidManStudio specializes in game development, web development, software solutions, and digital art. We bridge the gap between vision and reality.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Files - Updated paths for Leptos -->
+    <link rel="stylesheet" href="styles/colors.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4169e1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="MidManStudio - Game Development Portfolio">
+    <meta property="og:description" content="Professional game developer specializing in Unity, C#, and interactive experiences. Bridging the gap between vision and reality.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/og-image.png">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MidManStudio - Game Development Portfolio">
+    <meta name="twitter:description" content="Professional game developer specializing in Unity, C#, and interactive experiences.">
+    
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="modulepreload" href="/Mid-D-Man.github.io/Mid-D-Man.github.io/midmanstudio-9f3c7b6d1d3129ef.js" crossorigin="anonymous" integrity="sha384-YfA0gqNP4J2JEpb1opAuJ1YSsckBOKoigjYLO49Qj8b4HjKzhTE4/RM48/n0w5ye"><link rel="preload" href="/Mid-D-Man.github.io/Mid-D-Man.github.io/midmanstudio-9f3c7b6d1d3129ef_bg.wasm" crossorigin="anonymous" integrity="sha384-1UeAjVvi7yJKKIPl1pjHOkhx855QQorVAvUpnqpOUhhcpyWgHd8va7OuPkbffHxq" as="fetch" type="application/wasm"></head>
+<body>
+    <!-- Leptos will mount the app here -->
+    <div id="leptos"></div>
+    
+    <!-- Loading screen for better UX -->
+    <div id="loading-screen" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #4169e1 0%, #0047ab 50%, #003875 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        font-family: 'Orbitron', monospace;
+        color: #ffd700;
+    ">
+        <div style="text-align: center;">
+            <div style="
+                width: 50px;
+                height: 50px;
+                border: 3px solid rgba(255, 215, 0, 0.3);
+                border-top: 3px solid #ffd700;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin: 0 auto 20px;
+            "></div>
+            <h2 style="margin: 0; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">
+                MidManStudio
+            </h2>
+            <p style="margin: 10px 0 0; opacity: 0.8;">
+                Loading Portfolio...
+            </p>
+        </div>
+    </div>
+
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Hide loading screen after Leptos loads */
+        .leptos-loaded #loading-screen {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-out;
+        }
+    </style>
+
+    <script>
+        // Hide loading screen when Leptos is ready
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.body.classList.add('leptos-loaded');
+                setTimeout(function() {
+                    const loadingScreen = document.getElementById('loading-screen');
+                    if (loadingScreen) {
+                        loadingScreen.remove();
+                    }
+                }, 500);
+            }, 1000);
+        });
+    </script>
+
+<script type="module">
+import init, * as bindings from '/Mid-D-Man.github.io/midmanstudio-9f3c7b6d1d3129ef.js';
+const wasm = await init({ module_or_path: '/Mid-D-Man.github.io/midmanstudio-9f3c7b6d1d3129ef_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script></body>
+    </html>
