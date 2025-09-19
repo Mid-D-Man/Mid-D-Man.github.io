@@ -9,33 +9,80 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- CSS Files - Trunk will process these -->
+    <!-- CSS Files - Updated for Trunk -->
     <link data-trunk rel="css" href="styles/colors.css">
     <link data-trunk rel="css" href="styles/responsive.css">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <!-- Favicon - Trunk will handle this -->
+    <link data-trunk rel="icon" href="public/favicon.ico">
     
     <!-- PWA Support -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4169e1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="MidManStudio - Game Development Portfolio">
+    <meta property="og:description" content="Professional game developer specializing in Unity, C#, and interactive experiences. Bridging the gap between vision and reality.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/og-image.png">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MidManStudio - Game Development Portfolio">
+    <meta name="twitter:description" content="Professional game developer specializing in Unity, C#, and interactive experiences.">
+    
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
-    <!-- Leptos mount point - must match main.rs mount_to_body -->
-    <div id="leptos"></div>
-    
-    <!-- CRITICAL: This script tag tells Trunk to inject the WASM bootstrap -->
-    <script type="module">
-        import init from './pkg/midmanstudio.js';
-        
-        async function run() {
-            await init();
-        }
-        
-        run().catch(console.error);
+    <!-- Debug information -->
+    <script>
+        console.log('MidManStudio: HTML loaded, checking for Leptos mount point...');
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('MidManStudio: DOM loaded');
+            const leptosDiv = document.getElementById('leptos');
+            if (leptosDiv) {
+                console.log('MidManStudio: Leptos mount point found:', leptosDiv);
+            } else {
+                console.error('MidManStudio: Leptos mount point NOT found!');
+            }
+        });
+
+        // Monitor for WASM loading
+        let wasmLoadAttempted = false;
+        const originalFetch = window.fetch;
+        window.fetch = function(...args) {
+            if (args[0] && args[0].toString().includes('.wasm')) {
+                console.log('MidManStudio: WASM file loading:', args[0]);
+                wasmLoadAttempted = true;
+            }
+            return originalFetch.apply(this, args);
+        };
+
+        // Monitor for JavaScript errors
+        window.addEventListener('error', function(e) {
+            console.error('MidManStudio: JavaScript error:', e.error, e.filename, e.lineno);
+        });
+
+        // Monitor WASM instantiation
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('MidManStudio: Unhandled promise rejection:', e.reason);
+        });
     </script>
     
-    <!-- Loading screen -->
+    <!-- Leptos will mount the app here -->
+    <div id="leptos"></div>
+    
+    <!-- Debug: Show if leptos div exists -->
+    <script>
+        const leptosDiv = document.getElementById('leptos');
+        console.log('MidManStudio: Leptos div after creation:', leptosDiv);
+    </script>
+    
+    <!-- Loading screen for better UX -->
     <div id="loading-screen" style="
         position: fixed;
         top: 0;
@@ -66,6 +113,9 @@
             <p style="margin: 10px 0 0; opacity: 0.8;">
                 Loading Portfolio...
             </p>
+            <p id="debug-info" style="margin: 20px 0 0; opacity: 0.6; font-size: 0.8rem;">
+                Initializing WASM...
+            </p>
         </div>
     </div>
 
@@ -75,6 +125,7 @@
             100% { transform: rotate(360deg); }
         }
         
+        /* Hide loading screen after Leptos loads */
         .leptos-loaded #loading-screen {
             opacity: 0;
             pointer-events: none;
@@ -83,17 +134,62 @@
     </style>
 
     <script>
-        window.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
+        let debugTimeout;
+        let leptosCheckInterval;
+        
+        // Update debug info
+        function updateDebugInfo(message) {
+            const debugInfo = document.getElementById('debug-info');
+            if (debugInfo) {
+                debugInfo.textContent = message;
+            }
+            console.log('MidManStudio Debug:', message);
+        }
+
+        // Monitor if Leptos actually mounts content
+        function checkLeptosMount() {
+            const leptosDiv = document.getElementById('leptos');
+            if (leptosDiv && leptosDiv.children.length > 0) {
+                updateDebugInfo('Leptos mounted successfully!');
                 document.body.classList.add('leptos-loaded');
+                clearInterval(leptosCheckInterval);
+                
                 setTimeout(function() {
                     const loadingScreen = document.getElementById('loading-screen');
                     if (loadingScreen) {
                         loadingScreen.remove();
                     }
                 }, 500);
-            }, 2000); // Give WASM more time to load
+                return true;
+            }
+            return false;
+        }
+
+        // Start monitoring immediately
+        updateDebugInfo('Waiting for WASM to load...');
+        
+        // Check every 100ms if Leptos has mounted
+        leptosCheckInterval = setInterval(checkLeptosMount, 100);
+        
+        // Fallback timeout after 10 seconds
+        debugTimeout = setTimeout(function() {
+            if (!document.body.classList.contains('leptos-loaded')) {
+                updateDebugInfo('Loading timeout - check console for errors');
+                console.error('MidManStudio: Leptos failed to mount within 10 seconds');
+                console.error('WASM load attempted:', wasmLoadAttempted);
+                
+                const leptosDiv = document.getElementById('leptos');
+                console.error('Leptos div content:', leptosDiv ? leptosDiv.innerHTML : 'NOT FOUND');
+                console.error('Leptos div children:', leptosDiv ? leptosDiv.children.length : 'N/A');
+            }
+            clearInterval(leptosCheckInterval);
+        }, 10000);
+
+        // Also listen for the standard load event
+        window.addEventListener('load', function() {
+            updateDebugInfo('Window loaded, checking Leptos...');
+            setTimeout(checkLeptosMount, 1000);
         });
     </script>
 </body>
-</html>
+        </html>
