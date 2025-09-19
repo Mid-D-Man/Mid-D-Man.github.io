@@ -1,1 +1,72 @@
+Project Structure Documentation - MidManStudio Portfolio
+Generated: Fri Sep 19 02:00:43 UTC 2025
+Repository: Mid-D-Man/Mid-D-Man.github.io
+Commit: 278778b3c1bc9113a1c2977bff66ba6b67d222d7
+Branch: main
+Technology Stack: Leptos 0.8 (Rust WASM)
+==================================
 
+Source Files:
+============
+.github/workflows/deploy.yml
+Cargo.toml
+README.md
+Trunk.toml
+index.html
+js/responsive.js
+manifest.json
+src/app.rs
+src/components/about.rs
+src/components/contact.rs
+src/components/header.rs
+src/components/hero.rs
+src/components/mod.rs
+src/components/projects.rs
+src/components/services.rs
+src/lib.rs
+src/main.rs
+styles/colors.css
+styles/components.css
+styles/main.css
+styles/responsive.css
+
+Directory Structure:
+==================
+./
+./.github
+./  workflows
+./.idea
+./Others
+./icons
+./images
+./js
+./others
+./public
+./sharedPublic
+./src
+./  components
+./styles
+./svgs
+
+File Count Summary:
+==================
+.rs       : 10 files
+.toml     : 2 files
+.json     : 1 files
+.css      : 4 files
+.js       : 1 files
+.html     : 1 files
+.yml      : 1 files
+
+Project Information:
+==================
+Project Type: Leptos CSR (Client Side Rendering)
+Build Tool: Trunk
+Target: WebAssembly (WASM)
+Framework: Leptos 0.8
+Portfolio Type: Game Developer & Digital Artist
+Services: Game Dev, Web Dev, Software Dev, Digital Art
+Primary Colors: Royal Blue (#4169e1), Gold (#ffd700)
+Theme System: Gradient backgrounds with glow effects
+Responsive: Mobile-first approach
+PWA Ready: Service worker and manifest support
