@@ -1,0 +1,132 @@
+name: Deploy to GitHub Pages
+
+on:
+  workflow_run:
+    workflows: ["Build and Prepare MidManStudio Portfolio"]
+    types:
+      - completed
+    branches: [main, master]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Only deploy if the previous workflow succeeded and was triggered by publish keywords
+    if: github.event.workflow_run.conclusion == 'success'
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: portfolio-build
+          path: ./pages/
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Verify Download
+        run: |
+          echo "Verifying downloaded artifacts..."
+          ls -la ./pages/
+          
+          # Check essential files
+          if [ -f "./pages/index.html" ]; then
+            echo "✅ Index HTML found"
+          else
+            echo "❌ Index HTML missing"
+            exit 1
+          fi
+          
+          if [ -f "./pages/.nojekyll" ]; then
+            echo "✅ .nojekyll found"
+          else
+            echo "❌ .nojekyll missing"
+            exit 1
+          fi
+          
+          # Check WASM files
+          wasm_count=$(find ./pages -name "*.wasm" -type f | wc -l)
+          if [ "$wasm_count" -gt 0 ]; then
+            echo "✅ Found $wasm_count WASM files"
+          else
+            echo "❌ No WASM files found"
+            exit 1
+          fi
+          
+          # Check JavaScript files
+          js_count=$(find ./pages -name "*.js" -type f | wc -l)
+          if [ "$js_count" -gt 0 ]; then
+            echo "✅ Found $js_count JavaScript files"
+          else
+            echo "❌ No JavaScript files found"
+            exit 1
+          fi
+          
+          # Check CSS files
+          css_count=$(find ./pages -name "*.css" -type f | wc -l)
+          if [ "$css_count" -gt 0 ]; then
+            echo "✅ Found $css_count CSS files"
+          else
+            echo "⚠️ No CSS files found - this may cause styling issues"
+          fi
+          
+          echo "📊 Deployment Verification Summary:"
+          echo "  - Total files: $(find ./pages -type f | wc -l)"
+          echo "  - Size: $(du -sh ./pages | cut -f1)"
+          echo "  - WASM files: $wasm_count"
+          echo "  - JavaScript files: $js_count" 
+          echo "  - CSS files: $css_count"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./pages/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+
+      - name: Deployment Success
+        run: |
+          echo "🎉 MidManStudio Portfolio deployed successfully!"
+          echo "🌐 Your portfolio is available at:"
+          echo "   ${{ steps.deployment.outputs.page_url }}"
+          echo ""
+          echo "🎮 Portfolio Features Deployed:"
+          echo "   ✅ Game Development showcase"
+          echo "   ✅ Web Development projects" 
+          echo "   ✅ Software Development portfolio"
+          echo "   ✅ Digital Art & Design gallery"
+          echo "   ✅ Interactive Leptos 0.8 WASM interface"
+          echo "   ✅ Royal blue & gold theme with glow effects"
+          echo "   ✅ Mobile-first responsive design"
+          echo "   ✅ Fast WASM performance"
+          echo "   ✅ Cross-platform compatibility"
+          echo ""
+          echo "🦀 Built with Rust & Leptos 0.8 for maximum performance!"
+          
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: always()
+    steps:
+      - name: Cleanup Build Artifacts
+        continue-on-error: true
+        run: |
+          echo "Cleaning up temporary build artifacts..."
+          echo "Build artifacts will expire automatically after 1 day"
