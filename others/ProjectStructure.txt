@@ -1,13 +1,14 @@
 Project Structure Documentation - MidManStudio Portfolio
-Generated: Fri Sep 19 13:12:18 UTC 2025
+Generated: Fri Sep 19 13:13:09 UTC 2025
 Repository: Mid-D-Man/Mid-D-Man.github.io
-Commit: 23947918ad633bcf7d5d35181ef220d9bb2a4001
+Commit: 0f84fedc48805f48c3b50cf0dad0094c2ca1f3b0
 Branch: main
 Technology Stack: Leptos 0.8 (Rust WASM)
 ==================================
 
 Source Files:
 ============
+.github/workflows/deploy-to-pages.yml
 .github/workflows/deploy.yml
 Cargo.toml
 README.md
@@ -56,7 +57,7 @@ File Count Summary:
 .css      : 4 files
 .js       : 1 files
 .html     : 1 files
-.yml      : 1 files
+.yml      : 2 files
 
 Project Information:
 ==================
