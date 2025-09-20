@@ -174,6 +174,7 @@ jobs:
           echo "Framework: Leptos 0.8.9 with CSR"
           echo "Language: Rust (WASM target)"
           echo "Build Tool: Trunk"
+          echo "Repository: ${{ github.event.repository.name }}"
           echo "Branch: ${{ github.ref_name }}"
           echo "Commit: ${{ github.event.head_commit.message }}"
           echo "Author: ${{ github.event.head_commit.author.name }}"
@@ -192,8 +193,20 @@ jobs:
         run: |
           echo "Building MidManStudio Portfolio with Trunk and Leptos 0.8..."
           
-          # Build the project using Trunk with release optimizations
-          trunk build --release --public-url /${{ github.event.repository.name }}/
+          # FIXED: Use correct repository name for GitHub Pages path
+          # The repository name appears to be "Mid-D-Man.github.io" based on error messages
+          echo "Repository name: ${{ github.event.repository.name }}"
+          
+          # Build with the correct public URL - no subdirectory needed for username.github.io repos
+          if [[ "${{ github.event.repository.name }}" == *".github.io"* ]]; then
+            # This is a GitHub Pages user/org repo (username.github.io)
+            echo "Building for GitHub Pages user repository (root domain)"
+            trunk build --release --public-url /
+          else
+            # This is a project repository
+            echo "Building for GitHub Pages project repository"
+            trunk build --release --public-url /${{ github.event.repository.name }}/
+          fi
           
           echo "Build completed successfully with Leptos 0.8"
 
@@ -234,11 +247,17 @@ jobs:
             exit 1
           fi
           
-          # Update paths for GitHub Pages subpath
-          find ./deployment-ready -name "*.html" -type f -exec sed -i 's|href="/|href="/${{ github.event.repository.name }}/|g' {} \;
-          find ./deployment-ready -name "*.html" -type f -exec sed -i 's|src="/|src="/${{ github.event.repository.name }}/|g' {} \;
-          find ./deployment-ready -name "*.css" -type f -exec sed -i 's|url(/|url(/${{ github.event.repository.name }}/|g' {} \;
-          echo "Paths updated for GitHub Pages"
+          # FIXED: Only update paths if this is NOT a .github.io repo
+          if [[ "${{ github.event.repository.name }}" != *".github.io"* ]]; then
+            echo "Updating paths for GitHub Pages project repository..."
+            # Update paths for GitHub Pages subpath
+            find ./deployment-ready -name "*.html" -type f -exec sed -i 's|href="/|href="/${{ github.event.repository.name }}/|g' {} \;
+            find ./deployment-ready -name "*.html" -type f -exec sed -i 's|src="/|src="/${{ github.event.repository.name }}/|g' {} \;
+            find ./deployment-ready -name "*.css" -type f -exec sed -i 's|url(/|url(/${{ github.event.repository.name }}/|g' {} \;
+            echo "Paths updated for GitHub Pages project repository"
+          else
+            echo "Skipping path updates for GitHub Pages user repository (root domain)"
+          fi
           
           # Final verification of all required files
           echo "📋 Final verification of deployment files:"
@@ -259,6 +278,11 @@ jobs:
           echo "  - JavaScript files: $js_files"
           echo "  - CSS files: $css_files"
           echo "  - Total files: $(find ./deployment-ready -type f | wc -l)"
+          
+          # ADDED: Show actual file names for debugging
+          echo ""
+          echo "🗂️ Actual files generated:"
+          find ./deployment-ready -name "*.js" -o -name "*.wasm" -o -name "*.css" | sort
 
       # UPDATED: Using v4 of upload-artifact
       - name: Upload Build Artifacts
