@@ -1,6 +1,8 @@
 [build]
 target = "index.html"
 dist = "dist"
+# Do not set public-url here - let the GitHub Action handle it
+# public-url = "/"  # This will be set by the build command in CI
 
 [watch]
 watch = ["src", "styles"]
@@ -10,3 +12,10 @@ ignore = ["dist", "target"]
 address = "127.0.0.1"
 port = 8080
 open = true
+
+# Additional build optimizations for GitHub Pages
+[build.rust]
+# Ensure proper WASM optimization
+[build.rust.wasm-opt]
+[build.sass]
+style = "compressed"
