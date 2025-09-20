@@ -216,6 +216,15 @@ jobs:
           touch ./deployment-ready/.nojekyll
           echo ".nojekyll file created"
           
+          # Verify .nojekyll was created
+          if [ -f "./deployment-ready/.nojekyll" ]; then
+            echo "✅ .nojekyll file verified"
+            ls -la ./deployment-ready/.nojekyll
+          else
+            echo "❌ .nojekyll file creation failed"
+            exit 1
+          fi
+          
           # Create 404.html for SPA routing
           if [ -f "./deployment-ready/index.html" ]; then
             cp ./deployment-ready/index.html ./deployment-ready/404.html
@@ -230,6 +239,26 @@ jobs:
           find ./deployment-ready -name "*.html" -type f -exec sed -i 's|src="/|src="/${{ github.event.repository.name }}/|g' {} \;
           find ./deployment-ready -name "*.css" -type f -exec sed -i 's|url(/|url(/${{ github.event.repository.name }}/|g' {} \;
           echo "Paths updated for GitHub Pages"
+          
+          # Final verification of all required files
+          echo "📋 Final verification of deployment files:"
+          ls -la ./deployment-ready/
+          echo ""
+          echo "🔍 Checking for critical files:"
+          [ -f "./deployment-ready/index.html" ] && echo "✅ index.html" || echo "❌ index.html"
+          [ -f "./deployment-ready/404.html" ] && echo "✅ 404.html" || echo "❌ 404.html"  
+          [ -f "./deployment-ready/.nojekyll" ] && echo "✅ .nojekyll" || echo "❌ .nojekyll"
+          
+          # Count file types
+          wasm_files=$(find ./deployment-ready -name "*.wasm" | wc -l)
+          js_files=$(find ./deployment-ready -name "*.js" | wc -l)
+          css_files=$(find ./deployment-ready -name "*.css" | wc -l)
+          
+          echo "📊 File summary for artifact upload:"
+          echo "  - WASM files: $wasm_files"
+          echo "  - JavaScript files: $js_files"
+          echo "  - CSS files: $css_files"
+          echo "  - Total files: $(find ./deployment-ready -type f | wc -l)"
 
       # UPDATED: Using v4 of upload-artifact
       - name: Upload Build Artifacts
