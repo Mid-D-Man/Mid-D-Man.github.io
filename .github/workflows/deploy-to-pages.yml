@@ -79,11 +79,18 @@ jobs:
             exit 1
           fi
           
+          # Check for .nojekyll and create if missing
           if [ -f "./pages/.nojekyll" ]; then
             echo "✅ .nojekyll found"
           else
-            echo "❌ .nojekyll missing"
-            exit 1
+            echo "⚠️ .nojekyll missing - creating it now"
+            touch ./pages/.nojekyll
+            if [ -f "./pages/.nojekyll" ]; then
+              echo "✅ .nojekyll created successfully"
+            else
+              echo "❌ Failed to create .nojekyll"
+              exit 1
+            fi
           fi
           
           # Check WASM files
@@ -118,6 +125,11 @@ jobs:
           echo "  - WASM files: $wasm_count"
           echo "  - JavaScript files: $js_count" 
           echo "  - CSS files: $css_count"
+          
+          # Final file listing for debugging
+          echo ""
+          echo "🗂️ Final file structure:"
+          find ./pages -type f | sort
 
       # UPDATED: Using v4 of configure-pages (latest stable)
       - name: Setup Pages
