@@ -255,7 +255,7 @@ jobs:
           fi
           
           # FIXED: Add service worker for WASM MIME type fix
-          echo "🔧 Creating service worker for WASM MIME type fix..."
+          echo "🔧 Creating service worker for WASM MIME type fix...."
           cat > ./github-pages/service-worker.js << 'EOF'
           // Service Worker for GitHub Pages WASM MIME type fix
           const CACHE_NAME = 'midmanstudio-v1';
