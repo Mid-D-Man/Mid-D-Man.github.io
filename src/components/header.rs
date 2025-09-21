@@ -37,13 +37,31 @@ pub fn Header() -> impl IntoView {
     });
     
     view! {
-        <nav class="navbar" class:scrolled=is_scrolled>
+        <nav 
+            // FIXED: Proper conditional class syntax for Leptos 0.8
+            class=move || {
+                let mut classes = "navbar".to_string();
+                if is_scrolled.get() {
+                    classes.push_str(" scrolled");
+                }
+                classes
+            }
+        >
             <div class="nav-container">
                 <div class="nav-logo" on:click=move |_| scroll_to_section("home")>
                     <span class="logo-text">"MidManStudio"</span>
                     <span class="logo-tagline">"Vision → Reality"</span>
                 </div>
-                <div class="nav-menu" class:active=nav_open>
+                <div 
+                    // FIXED: Proper conditional class syntax for Leptos 0.8
+                    class=move || {
+                        let mut classes = "nav-menu".to_string();
+                        if nav_open.get() {
+                            classes.push_str(" active");
+                        }
+                        classes
+                    }
+                >
                     <a href="#home" class="nav-link" on:click=move |_| scroll_to_section("home")>"Home"</a>
                     <a href="#services" class="nav-link" on:click=move |_| scroll_to_section("services")>"Services"</a>
                     <a href="#projects" class="nav-link" on:click=move |_| scroll_to_section("projects")>"Projects"</a>
@@ -51,8 +69,14 @@ pub fn Header() -> impl IntoView {
                     <a href="#contact" class="nav-link" on:click=move |_| scroll_to_section("contact")>"Contact"</a>
                 </div>
                 <div 
-                    class="nav-toggle" 
-                    class:active=nav_open
+                    // FIXED: Proper conditional class syntax for Leptos 0.8
+                    class=move || {
+                        let mut classes = "nav-toggle".to_string();
+                        if nav_open.get() {
+                            classes.push_str(" active");
+                        }
+                        classes
+                    }
                     on:click=move |_| set_nav_open.update(|open| *open = !*open)
                 >
                     <span class="bar"></span>
