@@ -1,73 +1,31 @@
 Project Structure Documentation - MidManStudio Portfolio
-Generated: Sun Sep 21 12:12:52 UTC 2025
+Generated: Sun Sep 21 12:37:09 UTC 2025
 Repository: Mid-D-Man/Mid-D-Man.github.io
-Commit: 8eae0f7e7539c7c0de347c170d2c0987021b62b9
+Commit: e20c220a08eb2794831340ecccc7f1dc266f9065
 Branch: main
-Technology Stack: Leptos 0.8 (Rust WASM)
+Technology Stack: Leptos 0.8 (Rust WASM CSR)
 ==================================
 
 Source Files:
 ============
-.github/workflows/deploy.yml
-Cargo.toml
-README.md
-Trunk.toml
-index.html
-js/responsive.js
-manifest.json
-service-worker.js
-src/app.rs
-src/components/about.rs
-src/components/contact.rs
-src/components/header.rs
-src/components/hero.rs
-src/components/mod.rs
-src/components/projects.rs
-src/components/services.rs
-src/lib.rs
-src/main.rs
-styles/colors.css
-styles/components.css
-styles/main.css
-styles/responsive.css
+./Cargo.toml
+./Trunk.toml
+./index.html
+./src/app.rs
+./src/components/about.rs
+./src/components/contact.rs
+./src/components/header.rs
+./src/components/hero.rs
+./src/components/mod.rs
+./src/components/projects.rs
+./src/components/services.rs
+./src/lib.rs
+./src/main.rs
+./styles/colors.css
+./styles/components.css
+./styles/main.css
+./styles/responsive.css
 
-Directory Structure:
-==================
-./
-./.github
-./  workflows
-./.idea
-./Others
-./icons
-./images
-./js
-./others
-./public
-./sharedPublic
-./src
-./  components
-./styles
-./svgs
-
-File Count Summary:
-==================
-.rs       : 10 files
-.toml     : 2 files
-.json     : 1 files
-.css      : 4 files
-.js       : 2 files
-.html     : 1 files
-.yml      : 1 files
-
-Project Information:
-==================
-Project Type: Leptos CSR (Client Side Rendering)
+Deployment: Leptos CSR to GitHub Pages
 Build Tool: Trunk
 Target: WebAssembly (WASM)
-Framework: Leptos 0.8
-Portfolio Type: Game Developer & Digital Artist
-Services: Game Dev, Web Dev, Software Dev, Digital Art
-Primary Colors: Royal Blue (#4169e1), Gold (#ffd700)
-Theme System: Gradient backgrounds with glow effects
-Responsive: Mobile-first approach
-PWA Ready: Service worker and manifest support
