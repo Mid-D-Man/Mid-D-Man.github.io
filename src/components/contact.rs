@@ -99,9 +99,9 @@ pub fn Contact() -> impl IntoView {
                                     type="text"
                                     placeholder="Your Name"
                                     required
-                                    prop:value=name
+                                    prop:value=move || name.get()
                                     on:input=move |ev| set_name.set(event_target_value(&ev))
-                                    prop:disabled=is_submitting
+                                    prop:disabled=move || is_submitting.get()
                                 />
                             </div>
                             <div class="form-group">
@@ -109,17 +109,17 @@ pub fn Contact() -> impl IntoView {
                                     type="email"
                                     placeholder="Your Email"
                                     required
-                                    prop:value=email
+                                    prop:value=move || email.get()
                                     on:input=move |ev| set_email.set(event_target_value(&ev))
-                                    prop:disabled=is_submitting
+                                    prop:disabled=move || is_submitting.get()
                                 />
                             </div>
                             <div class="form-group">
                                 <select
                                     required
-                                    prop:value=service
+                                    prop:value=move || service.get()
                                     on:change=move |ev| set_service.set(event_target_value(&ev))
-                                    prop:disabled=is_submitting
+                                    prop:disabled=move || is_submitting.get()
                                 >
                                     <option value="">"Select Service"</option>
                                     <option value="game-dev">"Game Development"</option>
@@ -133,16 +133,23 @@ pub fn Contact() -> impl IntoView {
                                     placeholder="Tell us about your project..."
                                     rows="5"
                                     required
-                                    prop:value=message
+                                    prop:value=move || message.get()
                                     on:input=move |ev| set_message.set(event_target_value(&ev))
-                                    prop:disabled=is_submitting
+                                    prop:disabled=move || is_submitting.get()
                                 ></textarea>
                             </div>
+                            // FIXED: Proper conditional class syntax for Leptos 0.8
                             <button
                                 type="submit"
-                                class="btn btn-primary"
-                                class:loading=is_submitting
-                                prop:disabled=is_submitting
+                                // Fixed class attribute - use proper Leptos 0.8 syntax
+                                class=move || {
+                                    let mut classes = "btn btn-primary".to_string();
+                                    if is_submitting.get() {
+                                        classes.push_str(" loading");
+                                    }
+                                    classes
+                                }
+                                prop:disabled=move || is_submitting.get()
                             >
                                 {move || match submit_status.get() {
                                     Some(status) => status,
@@ -155,4 +162,4 @@ pub fn Contact() -> impl IntoView {
             </div>
         </section>
     }
-        }
+}
