@@ -1,17 +1,17 @@
-name: Build and Deploy MidManStudio Portfolio
+name: Deploy Leptos CSR to GitHub Pages
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
+  workflow_dispatch:
 
 permissions:
   contents: write
   pages: write
   id-token: write
-  actions: read
 
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -30,341 +30,147 @@ jobs:
         run: |
           echo "Generating comprehensive project structure for MidManStudio Portfolio..."
           
-          # Verify project directory structure
-          echo "Repository root contents:"
-          ls -la
-          
-          # Enhanced structure generation function
-          generate_comprehensive_structure() {
-            local base_path="$1"
-            local output_file="$2"
-          
-            # Initialize output file with metadata
-            {
-              echo "Project Structure Documentation - MidManStudio Portfolio"
-              echo "Generated: $(date -u)"
-              echo "Repository: ${{ github.repository }}"
-              echo "Commit: ${{ github.sha }}"
-              echo "Branch: ${{ github.ref_name }}"
-              echo "Technology Stack: Leptos 0.8 (Rust WASM)"
-              echo "=================================="
-              echo
-            } > "$output_file"
-          
-            # Capture all project-relevant files
-            echo "Source Files:" >> "$output_file"
-            echo "============" >> "$output_file"
-            find "$base_path" -type f \( \
-              -name "*.rs" -o \
-              -name "*.toml" -o \
-              -name "*.lock" -o \
-              -name "*.json" -o \
-              -name "*.css" -o \
-              -name "*.scss" -o \
-              -name "*.js" -o \
-              -name "*.ts" -o \
-              -name "*.html" -o \
-              -name "*.md" -o \
-              -name "*.yml" -o \
-              -name "*.yaml" \
-            \) -not -path "*/target/*" \
-              -not -path "*/dist/*" \
-              -not -path "*/.git/*" \
-              -not -path "*/node_modules/*" | \
-            sed "s|^$base_path/||" | sort >> "$output_file"
-          
-            echo >> "$output_file"
-            echo "Directory Structure:" >> "$output_file"
-            echo "==================" >> "$output_file"
-          
-            # Generate hierarchical directory tree
-            find "$base_path" -type d \
-              -not -path "*/target" \
-              -not -path "*/target/*" \
-              -not -path "*/dist" \
-              -not -path "*/dist/*" \
-              -not -path "*/.git" \
-              -not -path "*/.git/*" \
-              -not -path "*/node_modules" \
-              -not -path "*/node_modules/*" | \
-            sed "s|^$base_path||" | \
-            sed 's|^/||' | \
-            sort | \
-            sed 's|[^/]*/|  |g' | \
-            sed 's|^|./|' >> "$output_file"
-          
-            echo >> "$output_file"
-            echo "File Count Summary:" >> "$output_file"
-            echo "==================" >> "$output_file"
-          
-            # Generate file type statistics
-            for ext in rs toml lock json css scss js html yml yaml; do
-              count=$(find "$base_path" -name "*.$ext" -not -path "*/target/*" -not -path "*/dist/*" | wc -l)
-              if [ "$count" -gt 0 ]; then
-                printf "%-10s: %d files\n" ".$ext" "$count" >> "$output_file"
-              fi
-            done
-            
-            # Add MidManStudio specific information
-            echo >> "$output_file"
-            echo "Project Information:" >> "$output_file"
-            echo "==================" >> "$output_file"
-            echo "Project Type: Leptos CSR (Client Side Rendering)" >> "$output_file"
-            echo "Build Tool: Trunk" >> "$output_file"
-            echo "Target: WebAssembly (WASM)" >> "$output_file"
-            echo "Framework: Leptos 0.8" >> "$output_file"
-            echo "Portfolio Type: Game Developer & Digital Artist" >> "$output_file"
-            echo "Services: Game Dev, Web Dev, Software Dev, Digital Art" >> "$output_file"
-            echo "Primary Colors: Royal Blue (#4169e1), Gold (#ffd700)" >> "$output_file"
-            echo "Theme System: Gradient backgrounds with glow effects" >> "$output_file"
-            echo "Responsive: Mobile-first approach" >> "$output_file"
-            echo "PWA Ready: Service worker and manifest support" >> "$output_file"
-          }
-          
           # Create others directory (lowercase) and generate structure
           mkdir -p "others"
-          generate_comprehensive_structure "." "others/ProjectStructure.txt"
           
-          echo "Project structure documentation completed successfully"
+          # Generate structure file
+          {
+            echo "Project Structure Documentation - MidManStudio Portfolio"
+            echo "Generated: $(date -u)"
+            echo "Repository: ${{ github.repository }}"
+            echo "Commit: ${{ github.sha }}"
+            echo "Branch: ${{ github.ref_name }}"
+            echo "Technology Stack: Leptos 0.8 (Rust WASM CSR)"
+            echo "=================================="
+            echo
+            echo "Source Files:"
+            echo "============"
+            find . -type f \( -name "*.rs" -o -name "*.toml" -o -name "*.css" -o -name "*.html" \) \
+              -not -path "*/target/*" -not -path "*/dist/*" -not -path "*/.git/*" | sort
+            echo
+            echo "Deployment: Leptos CSR to GitHub Pages"
+            echo "Build Tool: Trunk"
+            echo "Target: WebAssembly (WASM)"
+          } > "others/ProjectStructure.txt"
 
       - name: Commit Updated Project Structure
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action - MidManStudio"
           
-          STRUCTURE_FILE="others/ProjectStructure.txt"
-          
-          if [ -f "$STRUCTURE_FILE" ]; then
-            # Verify changes exist before committing
-            if ! git diff --quiet "$STRUCTURE_FILE" 2>/dev/null; then
-              git add "$STRUCTURE_FILE"
+          if [ -f "others/ProjectStructure.txt" ]; then
+            if ! git diff --quiet "others/ProjectStructure.txt" 2>/dev/null; then
+              git add "others/ProjectStructure.txt"
               git commit -m "Auto-update MidManStudio project structure documentation [skip ci]"
               git push
               echo "Project structure committed successfully"
             else
               echo "No changes detected in project structure"
             fi
-          else
-            echo "Warning: Project structure file not found"
           fi
 
-  # Build and Deploy Job - runs on publish keywords or manual trigger
-  build-and-deploy:
+  # Build and Deploy Job - FIXED: Only trigger with deploy keywords OR manual trigger
+  deploy:
     runs-on: ubuntu-latest
     needs: update-structure
     if: contains(github.event.head_commit.message, '--publish') || contains(github.event.head_commit.message, '--PUBLISH') || contains(github.event.head_commit.message, 'deploy') || contains(github.event.head_commit.message, 'DEPLOY') || github.event_name == 'workflow_dispatch'
     
+    timeout-minutes: 15
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    
+      
     steps:
-      - name: Checkout Source Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Install Rust Nightly (Leptos Requirement)
+        uses: dtolnay/rust-toolchain@nightly
         with:
-          fetch-depth: 0
-
-      - name: Display Build Information
-        run: |
-          echo "🎮 Building MidManStudio Portfolio (Leptos 0.8 WASM)"
-          echo "Framework: Leptos 0.8.9 with CSR"
-          echo "Language: Rust (WASM target)"
-          echo "Build Tool: Trunk"
-          echo "Repository: ${{ github.event.repository.name }}"
-          echo "Branch: ${{ github.ref_name }}"
-          echo "Commit: ${{ github.event.head_commit.message }}"
-          echo "Author: ${{ github.event.head_commit.author.name }}"
-
-      - name: Setup Rust (Stable - Leptos 0.8 Compatible)
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          targets: wasm32-unknown-unknown
-
-      - name: Install Trunk
-        run: |
-          echo "Installing Trunk for Leptos 0.8 WASM builds..."
-          cargo install trunk
+          components: clippy, rustfmt
+          
+      - name: Add WASM target
+        run: rustup target add wasm32-unknown-unknown
 
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: "."
 
-      - name: Build MidManStudio Portfolio
+      - name: Lint (Optional but good practice)
         run: |
-          echo "Building MidManStudio Portfolio with Trunk and Leptos 0.8..."
-          
-          # Repository name detection and path configuration
+          cargo clippy --target wasm32-unknown-unknown
+          cargo fmt --check
+
+      - name: Download and install Trunk binary
+        run: |
+          echo "Installing Trunk for Leptos CSR builds..."
+          # Use the exact version from official docs
+          wget -qO- https://github.com/trunk-rs/trunk/releases/download/v0.21.4/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
+          chmod +x trunk
+          ./trunk --version
+
+      - name: Build with Trunk (CRITICAL FIX)
+        run: |
+          echo "Building MidManStudio with Leptos CSR configuration..."
+          echo "Repository: ${{ github.repository }}"
           echo "Repository name: ${{ github.event.repository.name }}"
           
-          # FIXED: Correct path handling for GitHub Pages
-          # For .github.io repositories, use root path
-          # For other repositories, use the repository name as subpath
+          # CRITICAL FIX: For .github.io repos, use root path, for others use repo name
           if [[ "${{ github.event.repository.name }}" == *".github.io" ]]; then
             echo "Building for GitHub Pages user repository (root domain)"
-            PUBLIC_URL="/"
+            echo "Using root path for .github.io repository"
+            # For .github.io repos, don't use --public-url or use "/"
+            ./trunk build --release
           else
             echo "Building for GitHub Pages project repository"
-            PUBLIC_URL="/${{ github.event.repository.name }}/"
+            echo "Using repository name as public URL: ${{ github.event.repository.name }}"
+            # CRITICAL: This is the key fix from official Leptos docs
+            ./trunk build --release --public-url "${{ github.event.repository.name }}"
           fi
           
-          echo "Using public URL: $PUBLIC_URL"
+          echo "Build completed - verifying output..."
+          ls -la dist/
           
-          # Build with correct public URL
-          trunk build --release --public-url "$PUBLIC_URL"
-          
-          echo "✅ Build completed successfully with Leptos 0.8"
-
-      - name: Prepare GitHub Pages Deployment
-        run: |
-          echo "📦 Preparing MidManStudio portfolio files for GitHub Pages..."
-          
-          mkdir -p ./github-pages
-          
-          # Copy built files from dist directory (Trunk output)
-          if [ -d "./dist" ]; then
-            cp -r ./dist/* ./github-pages/
-            echo "✅ Portfolio files copied successfully"
-          else
-            echo "❌ ERROR: dist directory not found"
-            ls -la
+          # Verify critical files exist
+          if [ ! -f "dist/index.html" ]; then
+            echo "ERROR: index.html not found in dist/"
             exit 1
           fi
           
-          # CRITICAL: Add .nojekyll to prevent Jekyll processing
-          touch ./github-pages/.nojekyll
-          echo "✅ .nojekyll file created"
-          
-          # Verify .nojekyll was created
-          if [ -f "./github-pages/.nojekyll" ]; then
-            echo "✅ .nojekyll file verified"
-            ls -la ./github-pages/.nojekyll
-          else
-            echo "❌ .nojekyll file creation failed"
-            exit 1
-          fi
-          
-          # Create 404.html for SPA routing
-          if [ -f "./github-pages/index.html" ]; then
-            cp ./github-pages/index.html ./github-pages/404.html
-            echo "✅ 404.html created for SPA routing"
-          else
-            echo "❌ ERROR: index.html not found"
-            exit 1
-          fi
-          
-          # FIXED: Add service worker for WASM MIME type fix
-          echo "🔧 Creating service worker for WASM MIME type fix...."
-          cat > ./github-pages/service-worker.js << 'EOF'
-          // Service Worker for GitHub Pages WASM MIME type fix
-          const CACHE_NAME = 'midmanstudio-v1';
-          const WASM_MIME_TYPE = 'application/wasm';
-          
-          self.addEventListener('install', event => {
-              console.log('MidManStudio Service Worker: Installing...');
-              self.skipWaiting();
-          });
-          
-          self.addEventListener('activate', event => {
-              console.log('MidManStudio Service Worker: Activated');
-              event.waitUntil(self.clients.claim());
-          });
-          
-          self.addEventListener('fetch', event => {
-              const url = new URL(event.request.url);
-              
-              if (url.pathname.endsWith('.wasm')) {
-                  console.log('Service Worker: Intercepting WASM request:', url.pathname);
-                  
-                  event.respondWith(
-                      fetch(event.request)
-                          .then(response => {
-                              if (response.ok) {
-                                  return response.blob().then(blob => {
-                                      return new Response(blob, {
-                                          status: response.status,
-                                          statusText: response.statusText,
-                                          headers: {
-                                              ...Object.fromEntries(response.headers.entries()),
-                                              'Content-Type': WASM_MIME_TYPE,
-                                              'Cross-Origin-Embedder-Policy': 'require-corp',
-                                              'Cross-Origin-Opener-Policy': 'same-origin'
-                                          }
-                                      });
-                                  });
-                              }
-                              return response;
-                          })
-                          .catch(error => {
-                              console.error('Service Worker: WASM fetch failed:', error);
-                              return new Response('WASM file not found', { 
-                                  status: 404, 
-                                  statusText: 'Not Found' 
-                              });
-                          })
-                  );
-                  return;
-              }
-          });
-          EOF
-          
-          echo "✅ Service worker created successfully"
-          
-          # VERIFY: Critical files exist
-          echo "🔍 Verifying WASM files..."
-          wasm_files=$(find ./github-pages -name "*.wasm" -type f)
+          wasm_files=$(find dist/ -name "*.wasm" -type f)
           if [ -z "$wasm_files" ]; then
-            echo "❌ ERROR: No WASM files found in build output!"
-            echo "This suggests the Rust/Leptos build failed or produced incorrect output."
-            echo "Build output contents:"
-            find ./github-pages -type f | head -20
+            echo "ERROR: No WASM files found in dist/"
             exit 1
           else
-            echo "✅ WASM files found:"
-            find ./github-pages -name "*.wasm" -type f -exec ls -la {} \;
+            echo "WASM files found:"
+            find dist/ -name "*.wasm" -type f -exec ls -la {} \;
           fi
-          
-          # VERIFY: JavaScript bootstrap files
-          echo "🔍 Verifying JavaScript files..."
-          js_files=$(find ./github-pages -name "*.js" -type f | grep -v service-worker)
-          if [ -z "$js_files" ]; then
-            echo "❌ ERROR: No JavaScript bootstrap files found!"
-            echo "Leptos/Trunk should generate .js files to load the WASM."
-            exit 1
-          else
-            echo "✅ JavaScript files found:"
-            find ./github-pages -name "*.js" -type f -exec ls -la {} \;
-          fi
-          
-          # Final verification of all required files
-          echo "📋 Final verification of deployment files:"
-          ls -la ./github-pages/
-          echo ""
-          echo "🔍 Checking for critical files:"
-          [ -f "./github-pages/index.html" ] && echo "✅ index.html" || echo "❌ index.html"
-          [ -f "./github-pages/404.html" ] && echo "✅ 404.html" || echo "❌ 404.html"  
-          [ -f "./github-pages/.nojekyll" ] && echo "✅ .nojekyll" || echo "❌ .nojekyll"
-          [ -f "./github-pages/service-worker.js" ] && echo "✅ service-worker.js" || echo "❌ service-worker.js"
-          
-          # Count file types
-          wasm_count=$(find ./github-pages -name "*.wasm" | wc -l)
-          js_count=$(find ./github-pages -name "*.js" | wc -l)
-          css_count=$(find ./github-pages -name "*.css" | wc -l)
-          
-          echo "📊 File summary for GitHub Pages:"
-          echo "  - WASM files: $wasm_count"
-          echo "  - JavaScript files: $js_count"
-          echo "  - CSS files: $css_count"
-          echo "  - Total files: $(find ./github-pages -type f | wc -l)"
 
-      - name: Setup Pages
+      - name: Prepare for GitHub Pages
+        run: |
+          echo "Preparing dist directory for GitHub Pages..."
+          
+          # Create .nojekyll to prevent Jekyll processing
+          touch dist/.nojekyll
+          echo ".nojekyll created"
+          
+          # Create 404.html for SPA routing (IMPORTANT for CSR)
+          cp dist/index.html dist/404.html
+          echo "404.html created for SPA routing"
+          
+          # Verify all required files
+          echo "Final verification:"
+          ls -la dist/
+          echo "Total files: $(find dist/ -type f | wc -l)"
+
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
 
-      - name: Upload to GitHub Pages
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./github-pages/
+          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
@@ -372,24 +178,14 @@ jobs:
 
       - name: Deployment Success
         run: |
-          echo "🎉 MidManStudio Portfolio deployed successfully!"
+          echo "🎉 MidManStudio Leptos CSR deployed successfully!"
           echo "🌐 Your portfolio is available at:"
           echo "   ${{ steps.deployment.outputs.page_url }}"
           echo ""
-          echo "🎮 Portfolio Features Deployed:"
-          echo "   ✅ Game Development showcase"
-          echo "   ✅ Web Development projects" 
-          echo "   ✅ Software Development portfolio"
-          echo "   ✅ Digital Art & Design gallery"
-          echo "   ✅ Interactive Leptos 0.8 WASM interface"
-          echo "   ✅ Royal blue & gold theme with glow effects"
-          echo "   ✅ Mobile-first responsive design"
-          echo "   ✅ Fast WASM performance"
-          echo "   ✅ Cross-platform compatibility"
-          echo ""
-          echo "🦀 Built with Rust & Leptos 0.8 for maximum performance!"
+          echo "🦀 Built with Rust & Leptos 0.8 CSR"
+          echo "📦 Deployed via GitHub Actions"
 
-  # Job that runs when deployment is skipped
+  # Only show deployment skipped when conditions are not met
   deployment-skipped:
     runs-on: ubuntu-latest
     needs: update-structure
@@ -398,32 +194,11 @@ jobs:
     steps:
       - name: Deployment Skipped Notice
         run: |
-          echo "🚀 MidManStudio portfolio deployment was skipped"
+          echo "ℹ️ MidManStudio deployment was skipped"
           echo ""
-          echo "To deploy your portfolio, include one of these keywords in your commit message:"
-          echo "  - '--publish' (case insensitive)"
-          echo "  - 'deploy' (case insensitive)"
+          echo "To deploy, use one of these triggers:"
+          echo "  • Include '--publish' or 'deploy' in your commit message"
+          echo "  • Use 'Manual workflow dispatch' in GitHub Actions"
           echo ""
-          echo "Example commit messages that trigger deployment:"
-          echo "  - 'Updated portfolio design --publish'"
-          echo "  - 'Added new game project --publish'"
-          echo "  - 'Fixed responsive layout issues deploy'"
-          echo "  - 'Portfolio ready for production DEPLOY'"
-          echo ""
-          echo "Or manually trigger deployment from GitHub Actions tab"
-          echo ""
-          echo "Current commit: ${{ github.event.head_commit.message }}"
-          echo "Author: ${{ github.event.head_commit.author.name }}"
-          echo ""
-          echo "✅ Project structure has been updated automatically"
-          echo "🦀 Rust/Leptos 0.8 portfolio ready for deployment when triggered"
-
-  cleanup:
-    runs-on: ubuntu-latest
-    needs: [build-and-deploy]
-    if: always()
-    steps:
-      - name: Cleanup
-        run: |
-          echo "🧹 Cleanup completed"
-          echo "Build artifacts are automatically managed by GitHub Actions"
+          echo "Current commit: '${{ github.event.head_commit.message }}'"
+          echo "✅ Project structure has been updated"
