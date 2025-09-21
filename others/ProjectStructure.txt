@@ -1,13 +1,14 @@
 Project Structure Documentation - MidManStudio Portfolio
-Generated: Sun Sep 21 12:40:52 UTC 2025
+Generated: Sun Sep 21 12:41:08 UTC 2025
 Repository: Mid-D-Man/Mid-D-Man.github.io
-Commit: 84080029a44a4a019e87276fdde291f5dda43dd6
+Commit: ee521391610643762ab6de1fd975ca62273cb1b0
 Branch: main
 Technology Stack: Leptos 0.8 (Rust WASM CSR)
 ==================================
 
 Source Files:
 ============
+./404.html
 ./Cargo.toml
 ./Trunk.toml
 ./index.html
