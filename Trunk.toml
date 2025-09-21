@@ -1,8 +1,9 @@
+# Trunk.toml - FIXED for GitHub Pages deployment
 [build]
 target = "index.html"
 dist = "dist"
-# Public URL will be set by GitHub Actions
-# Don't set public-url here - let CI handle it
+# IMPORTANT: Don't set public-url here for GitHub Pages
+# Let the build command handle it with --public-url flag
 
 [watch]
 watch = ["src", "styles"]
@@ -11,8 +12,24 @@ ignore = ["dist", "target"]
 [serve]
 address = "127.0.0.1"
 port = 8080
-open = true
+open = false  # Changed to false for CI environments
 
-# CSS compression
+# ADDED: Optimize for production builds
+[build.rust]
+# Ensure we're targeting wasm32-unknown-unknown
+target = "wasm32-unknown-unknown"
+
+# CSS processing
 [build.sass]
 style = "compressed"
+
+# ADDED: Asset handling for GitHub Pages
+[[build.hooks]]
+stage = "pre_build"
+command = "echo"
+command_arguments = ["Building for GitHub Pages deployment"]
+
+[[build.hooks]]
+stage = "post_build" 
+command = "echo"
+command_arguments = ["Build completed - dist/ ready for GitHub Pages"]
