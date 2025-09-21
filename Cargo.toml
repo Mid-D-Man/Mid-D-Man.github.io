@@ -3,8 +3,7 @@ name = "midmanstudio"
 version = "0.1.0"
 edition = "2021"
 
-# Remove the [lib] section entirely - not needed for CSR apps
-
+# Binary target for CSR apps
 [[bin]]
 name = "midmanstudio"
 path = "src/main.rs"
@@ -26,11 +25,37 @@ web-sys = { version = "0.3", features = [
   "ScrollIntoViewOptions",
   "ScrollBehavior",
   "ScrollToOptions",
+  # ADDED: Features for service worker and better error handling
+  "Navigator",
+  "ServiceWorkerContainer",
+  "ServiceWorkerRegistration",
+  "Request",
+  "Response",
+  "Headers",
+  "Blob",
+  "Url",
 ] }
 
-# Optimize for size in release builds
+# ADDED: JS-sys for better JavaScript interop
+js-sys = "0.3"
+
+# Optimize for size and compatibility in release builds
 [profile.release]
-opt-level = "z"
+opt-level = "s"  # Optimize for size instead of "z" for better compatibility
 lto = true
 codegen-units = 1
 panic = "abort"
+# ADDED: Ensure debug info is stripped but keep minimal for error reporting
+debug = false
+strip = "debuginfo"
+
+# ADDED: Optimize dev builds for faster development
+[profile.dev]
+opt-level = 0
+debug = true
+panic = "unwind"
+
+# ADDED: Ensure WASM-specific optimizations
+[profile.release.package."*"]
+opt-level = "s"
+debug = false
