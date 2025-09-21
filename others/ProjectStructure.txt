@@ -1,7 +1,7 @@
 Project Structure Documentation - MidManStudio Portfolio
-Generated: Sun Sep 21 02:02:50 UTC 2025
+Generated: Sun Sep 21 02:03:41 UTC 2025
 Repository: Mid-D-Man/Mid-D-Man.github.io
-Commit: 024fae452b7a13e7523e0f0c516ee217ad8a0808
+Commit: ad6eb2d858633b47654f15cfca0975cac5c83747
 Branch: main
 Technology Stack: Leptos 0.8 (Rust WASM)
 ==================================
@@ -16,6 +16,7 @@ Trunk.toml
 index.html
 js/responsive.js
 manifest.json
+service-worker.js
 src/app.rs
 src/components/about.rs
 src/components/contact.rs
@@ -55,7 +56,7 @@ File Count Summary:
 .toml     : 2 files
 .json     : 1 files
 .css      : 4 files
-.js       : 1 files
+.js       : 2 files
 .html     : 1 files
 .yml      : 2 files
 
