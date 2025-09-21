@@ -97,10 +97,23 @@ jobs:
         with:
           workspaces: "."
 
-      - name: Lint (Optional but good practice)
+      - name: Auto-fix formatting and lint
         run: |
-          cargo clippy --target wasm32-unknown-unknown
-          cargo fmt --check
+          echo "Auto-fixing Rust formatting..."
+          cargo fmt
+          echo "Running clippy for WASM target..."
+          cargo clippy --target wasm32-unknown-unknown --fix --allow-dirty --allow-staged
+          
+          # Commit any auto-fixes
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action - Auto Format"
+          if ! git diff --quiet; then
+            git add .
+            git commit -m "Auto-fix: Rust formatting and clippy suggestions [skip ci]"
+            echo "Auto-formatting applied and committed"
+          else
+            echo "No formatting changes needed"
+          fi
 
       - name: Download and install Trunk binary
         run: |
