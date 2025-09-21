@@ -1,8 +1,8 @@
 [build]
 target = "index.html"
 dist = "dist"
-# Public URL will be set by GitHub Actions based on repository type
-# public-url = "/"  # Don't set this - let CI handle it
+# Public URL will be set by GitHub Actions
+# Don't set public-url here - let CI handle it
 
 [watch]
 watch = ["src", "styles"]
@@ -13,27 +13,6 @@ address = "127.0.0.1"
 port = 8080
 open = true
 
-# WASM optimization settings for better GitHub Pages compatibility
-[build.rust]
-# Ensure WASM is optimized but compatible
-[build.rust.wasm-opt]
-# Use moderate optimization to avoid compatibility issues
-
-# CSS preprocessing
+# CSS compression
 [build.sass]
 style = "compressed"
-
-# ADDED: Ensure proper file handling for GitHub Pages
-[build.filehash]
-enable = true
-
-# ADDED: Ensure assets are copied correctly
-[[build.hooks]]
-stage = "pre_build"
-command = "echo"
-command_arguments = ["Starting MidManStudio build process..."]
-
-[[build.hooks]]
-stage = "post_build" 
-command = "echo"
-command_arguments = ["MidManStudio build completed successfully!"]
