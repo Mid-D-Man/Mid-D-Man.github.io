@@ -162,10 +162,10 @@ jobs:
         id: check
         run: echo "should_deploy=true" >> $GITHUB_OUTPUT
 
-      - name: Setup Rust (Current Nightly - Leptos 0.8 Compatible)
+      - name: Setup Rust (Current Stable - Leptos 0.8 Compatible)
         uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: nightly
+          toolchain: stable
           targets: wasm32-unknown-unknown
 
       - name: Display Build Information
@@ -193,20 +193,24 @@ jobs:
         run: |
           echo "Building MidManStudio Portfolio with Trunk and Leptos 0.8..."
           
-          # FIXED: Use correct repository name for GitHub Pages path
-          # The repository name appears to be "Mid-D-Man.github.io" based on error messages
+          # Repository name detection and path configuration
           echo "Repository name: ${{ github.event.repository.name }}"
           
-          # Build with the correct public URL - no subdirectory needed for username.github.io repos
-          if [[ "${{ github.event.repository.name }}" == *".github.io"* ]]; then
-            # This is a GitHub Pages user/org repo (username.github.io)
+          # FIXED: Correct path handling for GitHub Pages
+          # For .github.io repositories, use root path
+          # For other repositories, use the repository name as subpath
+          if [[ "${{ github.event.repository.name }}" == *".github.io" ]]; then
             echo "Building for GitHub Pages user repository (root domain)"
-            trunk build --release --public-url /
+            PUBLIC_URL="/"
           else
-            # This is a project repository
             echo "Building for GitHub Pages project repository"
-            trunk build --release --public-url /${{ github.event.repository.name }}/
+            PUBLIC_URL="/${{ github.event.repository.name }}/"
           fi
+          
+          echo "Using public URL: $PUBLIC_URL"
+          
+          # Build with correct public URL
+          trunk build --release --public-url "$PUBLIC_URL"
           
           echo "Build completed successfully with Leptos 0.8"
 
@@ -222,8 +226,66 @@ jobs:
             echo "Portfolio files copied successfully"
           else
             echo "ERROR: dist directory not found"
+            ls -la
             exit 1
           fi
+          
+          # CRITICAL FIX: Add service worker for WASM MIME types
+          echo "Creating service worker for WASM MIME type fix..."
+          cat > ./deployment-ready/service-worker.js << 'EOF'
+          // Service Worker for GitHub Pages WASM MIME type fix
+          const CACHE_NAME = 'midmanstudio-v1';
+          const WASM_MIME_TYPE = 'application/wasm';
+          
+          self.addEventListener('install', event => {
+              console.log('MidManStudio Service Worker: Installing...');
+              self.skipWaiting();
+          });
+          
+          self.addEventListener('activate', event => {
+              console.log('MidManStudio Service Worker: Activated');
+              event.waitUntil(self.clients.claim());
+          });
+          
+          self.addEventListener('fetch', event => {
+              const url = new URL(event.request.url);
+              
+              if (url.pathname.endsWith('.wasm')) {
+                  console.log('Service Worker: Intercepting WASM request:', url.pathname);
+                  
+                  event.respondWith(
+                      fetch(event.request)
+                          .then(response => {
+                              if (response.ok) {
+                                  return response.blob().then(blob => {
+                                      return new Response(blob, {
+                                          status: response.status,
+                                          statusText: response.statusText,
+                                          headers: {
+                                              ...Object.fromEntries(response.headers.entries()),
+                                              'Content-Type': WASM_MIME_TYPE,
+                                              'Cross-Origin-Embedder-Policy': 'require-corp',
+                                              'Cross-Origin-Opener-Policy': 'same-origin'
+                                          }
+                                      });
+                                  });
+                              }
+                              return response;
+                          })
+                          .catch(error => {
+                              console.error('Service Worker: WASM fetch failed:', error);
+                              return new Response('WASM file not found', { 
+                                  status: 404, 
+                                  statusText: 'Not Found' 
+                              });
+                          })
+                  );
+                  return;
+              }
+          });
+          EOF
+          
+          echo "Service worker created successfully"
           
           # Critical: Add .nojekyll to prevent Jekyll processing
           touch ./deployment-ready/.nojekyll
@@ -247,16 +309,45 @@ jobs:
             exit 1
           fi
           
-          # FIXED: Only update paths if this is NOT a .github.io repo
-          if [[ "${{ github.event.repository.name }}" != *".github.io"* ]]; then
+          # FIXED: Path updates - only for non-.github.io repos
+          if [[ "${{ github.event.repository.name }}" != *".github.io" ]]; then
             echo "Updating paths for GitHub Pages project repository..."
-            # Update paths for GitHub Pages subpath
+            # Update HTML file paths
             find ./deployment-ready -name "*.html" -type f -exec sed -i 's|href="/|href="/${{ github.event.repository.name }}/|g' {} \;
             find ./deployment-ready -name "*.html" -type f -exec sed -i 's|src="/|src="/${{ github.event.repository.name }}/|g' {} \;
+            # Update CSS file paths
             find ./deployment-ready -name "*.css" -type f -exec sed -i 's|url(/|url(/${{ github.event.repository.name }}/|g' {} \;
+            # Update service worker registration
+            find ./deployment-ready -name "*.html" -type f -exec sed -i 's|/service-worker.js|/${{ github.event.repository.name }}/service-worker.js|g' {} \;
             echo "Paths updated for GitHub Pages project repository"
           else
             echo "Skipping path updates for GitHub Pages user repository (root domain)"
+          fi
+          
+          # ADDED: Verify WASM files exist and have correct extensions
+          echo "🔍 Verifying WASM files..."
+          wasm_files=$(find ./deployment-ready -name "*.wasm" -type f)
+          if [ -z "$wasm_files" ]; then
+            echo "❌ ERROR: No WASM files found in build output!"
+            echo "This suggests the Rust/Leptos build failed or produced incorrect output."
+            echo "Build output contents:"
+            find ./deployment-ready -type f | head -20
+            exit 1
+          else
+            echo "✅ WASM files found:"
+            find ./deployment-ready -name "*.wasm" -type f -exec ls -la {} \;
+          fi
+          
+          # ADDED: Verify JavaScript bootstrap files
+          echo "🔍 Verifying JavaScript files..."
+          js_files=$(find ./deployment-ready -name "*.js" -type f | grep -v service-worker)
+          if [ -z "$js_files" ]; then
+            echo "❌ ERROR: No JavaScript bootstrap files found!"
+            echo "Leptos/Trunk should generate .js files to load the WASM."
+            exit 1
+          else
+            echo "✅ JavaScript files found:"
+            find ./deployment-ready -name "*.js" -type f -exec ls -la {} \;
           fi
           
           # Final verification of all required files
@@ -267,6 +358,7 @@ jobs:
           [ -f "./deployment-ready/index.html" ] && echo "✅ index.html" || echo "❌ index.html"
           [ -f "./deployment-ready/404.html" ] && echo "✅ 404.html" || echo "❌ 404.html"  
           [ -f "./deployment-ready/.nojekyll" ] && echo "✅ .nojekyll" || echo "❌ .nojekyll"
+          [ -f "./deployment-ready/service-worker.js" ] && echo "✅ service-worker.js" || echo "❌ service-worker.js"
           
           # Count file types
           wasm_files=$(find ./deployment-ready -name "*.wasm" | wc -l)
@@ -279,12 +371,17 @@ jobs:
           echo "  - CSS files: $css_files"
           echo "  - Total files: $(find ./deployment-ready -type f | wc -l)"
           
-          # ADDED: Show actual file names for debugging
+          # Show actual file names for debugging
           echo ""
-          echo "🗂️ Actual files generated:"
-          find ./deployment-ready -name "*.js" -o -name "*.wasm" -o -name "*.css" | sort
+          echo "🗂️ Critical files for Leptos:"
+          echo "WASM files:"
+          find ./deployment-ready -name "*.wasm" | sort
+          echo "JavaScript files:"
+          find ./deployment-ready -name "*.js" | sort
+          echo "CSS files:"
+          find ./deployment-ready -name "*.css" | sort
 
-      # UPDATED: Using v4 of upload-artifact
+      # Upload artifacts with retention
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
