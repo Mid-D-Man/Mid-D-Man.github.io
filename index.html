@@ -9,38 +9,21 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- CSS Files - FIXED: Use correct Trunk syntax -->
+    <!-- CSS Files - Trunk will handle these -->
     <link data-trunk rel="css" href="styles/colors.css" />
     <link data-trunk rel="css" href="styles/responsive.css" />
     <link data-trunk rel="css" href="styles/main.css" />
     <link data-trunk rel="css" href="styles/components.css" />
     
-    <!-- Favicon - Trunk will handle this -->
+    <!-- Favicon -->
     <link data-trunk rel="icon" href="public/favicon.ico" />
     
-    <!-- PWA Support - FIXED: Use data-trunk for manifest -->
+    <!-- PWA Manifest -->
     <link data-trunk rel="copy-file" href="manifest.json" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#4169e1" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="MidManStudio - Game Development Portfolio" />
-    <meta property="og:description" content="Professional game developer specializing in Unity, C#, and interactive experiences. Bridging the gap between vision and reality." />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="assets/og-image.png" />
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="MidManStudio - Game Development Portfolio" />
-    <meta name="twitter:description" content="Professional game developer specializing in Unity, C#, and interactive experiences." />
-    
-    <!-- Performance optimizations -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
-    <!-- FIXED: Basic inline styles for immediate loading -->
+    <!-- Basic styling for immediate loading -->
     <style>
         body {
             margin: 0;
@@ -48,10 +31,37 @@
             background: linear-gradient(135deg, #4169e1 0%, #0047ab 50%, #003875 100%);
             font-family: 'Rajdhani', sans-serif;
             color: white;
+            min-height: 100vh;
         }
         
         #leptos {
             min-height: 100vh;
+        }
+        
+        /* Loading spinner */
+        .loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            background: linear-gradient(135deg, #4169e1 0%, #0047ab 50%, #003875 100%);
+            font-family: 'Orbitron', monospace;
+            text-align: center;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 215, 0, 0.3);
+            border-top: 3px solid #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
         }
         
         @keyframes spin {
@@ -59,281 +69,98 @@
             100% { transform: rotate(360deg); }
         }
         
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #4169e1 0%, #0047ab 50%, #003875 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            font-family: 'Orbitron', monospace;
-            color: #ffd700;
-            transition: opacity 0.5s ease-out;
-        }
-        
-        /* Hide loading screen after Leptos loads */
-        .leptos-loaded #loading-screen {
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(255, 215, 0, 0.3);
-            border-top: 3px solid #ffd700;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        /* ADDED: Fallback error styles */
-        .error-container {
-            text-align: center;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .error-container h2 {
-            color: #ffd700;
-            margin-bottom: 20px;
-        }
-        
-        .error-container p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-        
-        .error-container .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
-            color: #000;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin: 10px;
+        /* Hide loading when Leptos loads */
+        .leptos-loaded .loading-container {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <!-- CRITICAL FIX: Add .htaccess equivalent for GitHub Pages -->
-    <script>
-        // GitHub Pages WASM MIME type fix
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js').catch(function(err) {
-                console.log('Service Worker registration failed: ', err);
-            });
-        }
-    </script>
-    
-    <!-- Leptos will mount the app here -->
+    <!-- Leptos mounting point -->
     <div id="leptos"></div>
     
-    <!-- Loading screen for better UX -->
-    <div id="loading-screen">
-        <div style="text-align: center;">
-            <div class="loading-spinner"></div>
-            <h2 style="margin: 0; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">
-                MidManStudio
-            </h2>
-            <p style="margin: 10px 0 0; opacity: 0.8;">
-                Loading Portfolio...
-            </p>
-            <p id="debug-info" style="margin: 20px 0 0; opacity: 0.6; font-size: 0.8rem;">
-                Initializing WASM...
-            </p>
+    <!-- Loading screen - will be hidden when Leptos loads -->
+    <div class="loading-container" id="loading">
+        <div>
+            <div class="spinner"></div>
+            <h2>MidManStudio</h2>
+            <p>Loading Portfolio...</p>
         </div>
     </div>
 
-    <!-- ADDED: Fallback error content (hidden initially) -->
-    <div id="fallback-content" style="display: none;" class="error-container">
-        <h2>🎮 MidManStudio</h2>
-        <p>We're experiencing technical difficulties loading the interactive portfolio.</p>
-        <p>This usually happens due to WASM loading issues on GitHub Pages.</p>
-        <h3>Quick Solutions:</h3>
-        <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
-            <li>Try refreshing the page</li>
-            <li>Clear your browser cache</li>
-            <li>Ensure JavaScript is enabled</li>
-            <li>Try a different browser</li>
-        </ul>
-        <div style="margin: 30px 0;">
-            <a href="https://github.com/mid-d-man" class="btn">View GitHub Profile</a>
-            <a href="https://mid-d-man.github.io/AirCode/" class="btn">AirCode Project</a>
-        </div>
-        <p style="opacity: 0.7; font-size: 0.9rem;">
-            Game Development • Web Development • Software Solutions • Digital Art
-        </p>
-    </div>
-
+    <!-- Enhanced initialization script -->
     <script>
         console.log('MidManStudio: Initializing...');
         
-        let leptosCheckInterval;
-        let debugTimeout;
-        let wasmLoadAttempted = false;
-        let wasmLoadSuccess = false;
+        // Enhanced WASM loading detection
+        let wasmLoaded = false;
+        let leptosReady = false;
         
-        // Update debug info
-        function updateDebugInfo(message) {
-            const debugInfo = document.getElementById('debug-info');
-            if (debugInfo) {
-                debugInfo.textContent = message;
-            }
-            console.log('MidManStudio Debug:', message);
-        }
-
-        // ADDED: Show fallback content function
-        function showFallbackContent() {
-            const loadingScreen = document.getElementById('loading-screen');
-            const fallbackContent = document.getElementById('fallback-content');
-            const leptosDiv = document.getElementById('leptos');
-            
-            if (loadingScreen) loadingScreen.style.display = 'none';
-            if (fallbackContent) fallbackContent.style.display = 'block';
-            if (leptosDiv) leptosDiv.style.display = 'none';
-            
-            console.error('MidManStudio: Showing fallback content due to loading failure');
-        }
-
-        // Enhanced WASM monitoring
+        // Monitor for WASM loading
         const originalFetch = window.fetch;
         window.fetch = function(...args) {
             if (args[0] && args[0].toString().includes('.wasm')) {
-                console.log('MidManStudio: WASM file loading:', args[0]);
-                wasmLoadAttempted = true;
-                updateDebugInfo('WASM file downloading...');
-                
+                console.log('MidManStudio: WASM request detected:', args[0]);
                 return originalFetch.apply(this, args).then(response => {
                     if (response.ok) {
-                        console.log('MidManStudio: WASM file loaded successfully');
-                        wasmLoadSuccess = true;
-                        updateDebugInfo('WASM loaded, initializing app...');
-                    } else {
-                        console.error('MidManStudio: WASM file failed to load:', response.status, response.statusText);
-                        updateDebugInfo('WASM loading failed: ' + response.status);
+                        console.log('MidManStudio: WASM loaded successfully');
+                        wasmLoaded = true;
                     }
                     return response;
-                }).catch(error => {
-                    console.error('MidManStudio: WASM fetch error:', error);
-                    updateDebugInfo('WASM fetch error: ' + error.message);
-                    throw error;
                 });
             }
             return originalFetch.apply(this, args);
         };
-
-        // Enhanced WebAssembly monitoring
-        const originalInstantiate = WebAssembly.instantiate;
-        WebAssembly.instantiate = function(...args) {
-            console.log('MidManStudio: WebAssembly.instantiate called');
-            updateDebugInfo('Compiling WASM module...');
-            
-            return originalInstantiate.apply(this, args).then(result => {
-                console.log('MidManStudio: WASM instantiated successfully');
-                updateDebugInfo('WASM compiled successfully!');
-                return result;
-            }).catch(error => {
-                console.error('MidManStudio: WASM instantiation failed:', error);
-                updateDebugInfo('WASM compilation failed: ' + error.message);
-                throw error;
-            });
-        };
-
-        // Monitor if Leptos actually mounts content
+        
+        // Check if Leptos has mounted
         function checkLeptosMount() {
             const leptosDiv = document.getElementById('leptos');
             if (leptosDiv && leptosDiv.children.length > 0) {
-                console.log('MidManStudio: Leptos content detected:', leptosDiv.children.length, 'elements');
-                updateDebugInfo('Leptos mounted successfully!');
+                console.log('MidManStudio: Leptos mounted successfully!');
+                leptosReady = true;
                 document.body.classList.add('leptos-loaded');
-                clearInterval(leptosCheckInterval);
-                clearTimeout(debugTimeout);
-                
-                setTimeout(function() {
-                    const loadingScreen = document.getElementById('loading-screen');
-                    if (loadingScreen) {
-                        loadingScreen.remove();
-                    }
-                }, 500);
                 return true;
             }
             return false;
         }
-
-        // Start monitoring immediately
-        updateDebugInfo('Waiting for WASM to load...');
         
-        // Check every 100ms if Leptos has mounted
-        leptosCheckInterval = setInterval(checkLeptosMount, 100);
+        // Start checking for Leptos mount
+        const checkInterval = setInterval(() => {
+            if (checkLeptosMount()) {
+                clearInterval(checkInterval);
+            }
+        }, 100);
         
-        // Extended timeout with better error handling
-        debugTimeout = setTimeout(function() {
-            if (!document.body.classList.contains('leptos-loaded')) {
-                updateDebugInfo('Loading timeout - diagnosing issue...');
-                console.error('MidManStudio: Leptos failed to mount within 20 seconds');
-                console.error('WASM load attempted:', wasmLoadAttempted);
-                console.error('WASM load success:', wasmLoadSuccess);
+        // Fallback timeout
+        setTimeout(() => {
+            if (!leptosReady) {
+                console.error('MidManStudio: Timeout waiting for Leptos to mount');
+                console.error('WASM loaded:', wasmLoaded);
+                console.error('DOM content:', document.getElementById('leptos').innerHTML);
                 
-                const leptosDiv = document.getElementById('leptos');
-                console.error('Leptos div content:', leptosDiv ? leptosDiv.innerHTML : 'NOT FOUND');
-                console.error('Leptos div children:', leptosDiv ? leptosDiv.children.length : 'N/A');
-                
-                // Detailed diagnostics
-                if (!wasmLoadAttempted) {
-                    updateDebugInfo('Error: WASM file was never requested');
-                    console.error('MidManStudio: WASM file was never requested - check build output');
-                } else if (!wasmLoadSuccess) {
-                    updateDebugInfo('Error: WASM file failed to load');
-                    console.error('MidManStudio: WASM file request failed - check MIME types and CORS');
-                } else {
-                    updateDebugInfo('Error: WASM loaded but Leptos failed to initialize');
-                    console.error('MidManStudio: WASM loaded successfully but Leptos failed to mount');
+                // Show error message
+                const loadingDiv = document.getElementById('loading');
+                if (loadingDiv) {
+                    loadingDiv.innerHTML = `
+                        <div>
+                            <h2>MidManStudio</h2>
+                            <p style="color: #ffd700;">Loading issue detected</p>
+                            <p style="font-size: 0.9rem; opacity: 0.8;">
+                                Please try refreshing the page.<br>
+                                Check browser console for details.
+                            </p>
+                        </div>
+                    `;
                 }
-                
-                // Show fallback content after 5 more seconds
-                setTimeout(showFallbackContent, 5000);
             }
-            clearInterval(leptosCheckInterval);
-        }, 20000); // Increased to 20 seconds
-
-        // Monitor for JavaScript/WASM errors
-        window.addEventListener('error', function(e) {
-            console.error('MidManStudio: JavaScript error:', e.error, e.filename, e.lineno);
-            updateDebugInfo('JavaScript error - check console');
-        });
-
-        // Monitor WASM instantiation errors
-        window.addEventListener('unhandledrejection', function(e) {
-            console.error('MidManStudio: Unhandled promise rejection:', e.reason);
-            if (e.reason && e.reason.toString().toLowerCase().includes('wasm')) {
-                updateDebugInfo('WASM error - check console for details');
-                setTimeout(showFallbackContent, 2000);
-            }
-        });
-
-        // Also listen for the standard load event
-        window.addEventListener('load', function() {
-            updateDebugInfo('Page loaded, checking Leptos initialization...');
+            clearInterval(checkInterval);
+        }, 15000); // 15 second timeout
+        
+        // Page load handler
+        window.addEventListener('load', () => {
+            console.log('MidManStudio: Page loaded');
             setTimeout(checkLeptosMount, 1000);
         });
-
-        // Check immediately when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', function() {
-                console.log('MidManStudio: DOM loaded');
-                const leptosDiv = document.getElementById('leptos');
-                console.log('MidManStudio: Leptos mount point found:', !!leptosDiv);
-            });
-        } else {
-            console.log('MidManStudio: DOM already loaded');
-        }
     </script>
 </body>
 </html>
