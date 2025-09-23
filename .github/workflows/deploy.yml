@@ -35,12 +35,21 @@ jobs:
 
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install Trunk
         run: |
           wget -qO- https://github.com/trunk-rs/trunk/releases/download/v0.21.4/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
           chmod +x trunk
           ./trunk --version
+
+      - name: Verify Cargo Configuration
+        run: |
+          echo "=== Cargo.toml contents ==="
+          cat Cargo.toml
+          echo "=== Checking for target conflicts ==="
+          cargo metadata --format-version 1 | grep -E '"name"|"crate_types"' || true
 
       - name: Build with Trunk
         run: |
@@ -52,6 +61,13 @@ jobs:
             echo "Building for project GitHub Pages with base path: /${{ github.event.repository.name }}"
             ./trunk build --release --public-url "/${{ github.event.repository.name }}/"
           fi
+
+      - name: Verify Build Output
+        run: |
+          echo "=== Build output structure ==="
+          find ./dist -type f -name "*.wasm" -o -name "*.js" -o -name "*.html" | head -10
+          echo "=== dist/ directory contents ==="
+          ls -la ./dist/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
