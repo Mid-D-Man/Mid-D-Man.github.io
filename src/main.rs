@@ -13,10 +13,6 @@ fn main() {
     // Simple console log
     web_sys::console::log_1(&"MidManStudio: Starting Leptos CSR...".into());
     
-    // Mount to body - this is the correct way for Leptos 0.8 CSR
-    mount_to_body(|| {
-        view! {
-            <App/>
-        }
-    })
+    // FIXED: Correct way to mount in Leptos 0.8 CSR
+    leptos::mount::mount_to_body(App);
 }
