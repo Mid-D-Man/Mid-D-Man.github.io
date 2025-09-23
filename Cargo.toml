@@ -3,8 +3,13 @@ name = "midmanstudio"
 version = "0.1.0"
 edition = "2021"
 
+# FIXED: For Leptos CSR, we only need the library target, not the binary
 [lib]
 crate-type = ["cdylib"]
+name = "midmanstudio"
+
+# REMOVED: The [[bin]] section that was causing the collision
+# For Leptos CSR, we don't need a binary target since it compiles to WASM
 
 [dependencies]
 leptos = { version = "0.8", features = ["csr", "nightly"] }
