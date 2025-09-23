@@ -6,178 +6,54 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Job to update project structure on every push
-  update-structure:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-
-      - name: Update Project Structure
-        run: |
-          echo "Generating comprehensive project structure for MidManStudio Portfolio..."
-          
-          # Create others directory (lowercase) and generate structure
-          mkdir -p "others"
-          
-          # Generate structure file
-          {
-            echo "Project Structure Documentation - MidManStudio Portfolio"
-            echo "Generated: $(date -u)"
-            echo "Repository: ${{ github.repository }}"
-            echo "Commit: ${{ github.sha }}"
-            echo "Branch: ${{ github.ref_name }}"
-            echo "Technology Stack: Leptos 0.8 (Rust WASM CSR)"
-            echo "=================================="
-            echo
-            echo "Source Files:"
-            echo "============"
-            find . -type f \( -name "*.rs" -o -name "*.toml" -o -name "*.css" -o -name "*.html" \) \
-              -not -path "*/target/*" -not -path "*/dist/*" -not -path "*/.git/*" | sort
-            echo
-            echo "Deployment: Leptos CSR to GitHub Pages"
-            echo "Build Tool: Trunk"
-            echo "Target: WebAssembly (WASM)"
-          } > "others/ProjectStructure.txt"
-
-      - name: Commit Updated Project Structure
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action - MidManStudio"
-          
-          if [ -f "others/ProjectStructure.txt" ]; then
-            if ! git diff --quiet "others/ProjectStructure.txt" 2>/dev/null; then
-              git add "others/ProjectStructure.txt"
-              git commit -m "Auto-update MidManStudio project structure documentation [skip ci]"
-              git push
-              echo "Project structure committed successfully"
-            else
-              echo "No changes detected in project structure"
-            fi
-          fi
-
-  # Build and Deploy Job - FIXED: Only trigger with deploy keywords OR manual trigger
-  deploy:
-    runs-on: ubuntu-latest
-    needs: update-structure
-    if: contains(github.event.head_commit.message, '--publish') || contains(github.event.head_commit.message, '--PUBLISH') || contains(github.event.head_commit.message, 'deploy') || contains(github.event.head_commit.message, 'DEPLOY') || github.event_name == 'workflow_dispatch'
-    
-    timeout-minutes: 15
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-      
+    
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Rust Nightly (Leptos Requirement)
+      - name: Install Rust Nightly
         uses: dtolnay/rust-toolchain@nightly
         with:
-          components: clippy, rustfmt
+          components: rustfmt
           
       - name: Add WASM target
         run: rustup target add wasm32-unknown-unknown
 
-      - name: Rust Cache
+      - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: "."
 
-      - name: Auto-fix formatting and lint
+      - name: Install Trunk
         run: |
-          echo "Auto-fixing Rust formatting..."
-          cargo fmt
-          echo "Running clippy for WASM target..."
-          cargo clippy --target wasm32-unknown-unknown --fix --allow-dirty --allow-staged
-          
-          # Commit any auto-fixes
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action - Auto Format"
-          if ! git diff --quiet; then
-            git add .
-            git commit -m "Auto-fix: Rust formatting and clippy suggestions [skip ci]"
-            echo "Auto-formatting applied and committed"
-          else
-            echo "No formatting changes needed"
-          fi
-
-      - name: Download and install Trunk binary
-        run: |
-          echo "Installing Trunk for Leptos CSR builds..."
-          # Use the exact version from official docs
           wget -qO- https://github.com/trunk-rs/trunk/releases/download/v0.21.4/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
           chmod +x trunk
           ./trunk --version
 
-      - name: Build with Trunk (CRITICAL FIX)
+      - name: Build with Trunk
         run: |
-          echo "Building MidManStudio with Leptos CSR configuration..."
-          echo "Repository: ${{ github.repository }}"
-          echo "Repository name: ${{ github.event.repository.name }}"
-          
-          # CRITICAL FIX: For .github.io repos, use root path, for others use repo name
+          # For GitHub Pages project repos, use the repository name as base path
           if [[ "${{ github.event.repository.name }}" == *".github.io" ]]; then
-            echo "Building for GitHub Pages user repository (root domain)"
-            echo "Using root path for .github.io repository"
-            # For .github.io repos, don't use --public-url or use "/"
+            echo "Building for user/org GitHub Pages (root domain)"
             ./trunk build --release
           else
-            echo "Building for GitHub Pages project repository"
-            echo "Using repository name as public URL: ${{ github.event.repository.name }}"
-            # CRITICAL: This is the key fix from official Leptos docs
-            ./trunk build --release --public-url "${{ github.event.repository.name }}"
-          fi
-          
-          echo "Build completed - verifying output..."
-          ls -la dist/
-          
-          # Verify critical files exist
-          if [ ! -f "dist/index.html" ]; then
-            echo "ERROR: index.html not found in dist/"
-            exit 1
-          fi
-          
-          wasm_files=$(find dist/ -name "*.wasm" -type f)
-          if [ -z "$wasm_files" ]; then
-            echo "ERROR: No WASM files found in dist/"
-            exit 1
-          else
-            echo "WASM files found:"
-            find dist/ -name "*.wasm" -type f -exec ls -la {} \;
+            echo "Building for project GitHub Pages with base path: /${{ github.event.repository.name }}"
+            ./trunk build --release --public-url "/${{ github.event.repository.name }}/"
           fi
 
-      - name: Prepare for GitHub Pages
-        run: |
-          echo "Preparing dist directory for GitHub Pages..."
-          
-          # Create .nojekyll to prevent Jekyll processing
-          touch dist/.nojekyll
-          echo ".nojekyll created"
-          
-          # Create 404.html for SPA routing (IMPORTANT for CSR)
-          cp dist/index.html dist/404.html
-          echo "404.html created for SPA routing"
-          
-          # Verify all required files
-          echo "Final verification:"
-          ls -la dist/
-          echo "Total files: $(find dist/ -type f | wc -l)"
-
-      - name: Setup GitHub Pages
+      - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
@@ -188,30 +64,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Deployment Success
-        run: |
-          echo "🎉 MidManStudio Leptos CSR deployed successfully!"
-          echo "🌐 Your portfolio is available at:"
-          echo "   ${{ steps.deployment.outputs.page_url }}"
-          echo ""
-          echo "🦀 Built with Rust & Leptos 0.8 CSR"
-          echo "📦 Deployed via GitHub Actions"
-
-  # Only show deployment skipped when conditions are not met
-  deployment-skipped:
-    runs-on: ubuntu-latest
-    needs: update-structure
-    if: "!(contains(github.event.head_commit.message, '--publish') || contains(github.event.head_commit.message, '--PUBLISH') || contains(github.event.head_commit.message, 'deploy') || contains(github.event.head_commit.message, 'DEPLOY')) && github.event_name != 'workflow_dispatch'"
-    
-    steps:
-      - name: Deployment Skipped Notice
-        run: |
-          echo "ℹ️ MidManStudio deployment was skipped"
-          echo ""
-          echo "To deploy, use one of these triggers:"
-          echo "  • Include '--publish' or 'deploy' in your commit message"
-          echo "  • Use 'Manual workflow dispatch' in GitHub Actions"
-          echo ""
-          echo "Current commit: '${{ github.event.head_commit.message }}'"
-          echo "✅ Project structure has been updated"
