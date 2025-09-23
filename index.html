@@ -15,14 +15,6 @@
     <link data-trunk rel="css" href="styles/main.css" />
     <link data-trunk rel="css" href="styles/components.css" />
     
-    <!-- Favicon -->
-    <link data-trunk rel="icon" href="public/favicon.ico" />
-    
-    <!-- PWA Manifest -->
-    <link data-trunk rel="copy-file" href="manifest.json" />
-    <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#4169e1" />
-    
     <!-- Basic styling for immediate loading -->
     <style>
         body {
@@ -31,10 +23,6 @@
             background: linear-gradient(135deg, #4169e1 0%, #0047ab 50%, #003875 100%);
             font-family: 'Rajdhani', sans-serif;
             color: white;
-            min-height: 100vh;
-        }
-        
-        #leptos {
             min-height: 100vh;
         }
         
@@ -69,17 +57,26 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Hide loading when Leptos loads */
-        .leptos-loaded .loading-container {
+        /* Hide loading when content appears */
+        body:has(.app) .loading-container {
             display: none;
+        }
+        
+        /* Fallback: Hide after 3 seconds regardless */
+        .loading-container {
+            animation: fadeOut 0.5s ease-in-out 3s forwards;
+        }
+        
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                pointer-events: none;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Leptos mounting point -->
-    <div id="leptos"></div>
-    
-    <!-- Loading screen - will be hidden when Leptos loads -->
+    <!-- Loading screen -->
     <div class="loading-container" id="loading">
         <div>
             <div class="spinner"></div>
@@ -88,79 +85,6 @@
         </div>
     </div>
 
-    <!-- Enhanced initialization script -->
-    <script>
-        console.log('MidManStudio: Initializing...');
-        
-        // Enhanced WASM loading detection
-        let wasmLoaded = false;
-        let leptosReady = false;
-        
-        // Monitor for WASM loading
-        const originalFetch = window.fetch;
-        window.fetch = function(...args) {
-            if (args[0] && args[0].toString().includes('.wasm')) {
-                console.log('MidManStudio: WASM request detected:', args[0]);
-                return originalFetch.apply(this, args).then(response => {
-                    if (response.ok) {
-                        console.log('MidManStudio: WASM loaded successfully');
-                        wasmLoaded = true;
-                    }
-                    return response;
-                });
-            }
-            return originalFetch.apply(this, args);
-        };
-        
-        // Check if Leptos has mounted
-        function checkLeptosMount() {
-            const leptosDiv = document.getElementById('leptos');
-            if (leptosDiv && leptosDiv.children.length > 0) {
-                console.log('MidManStudio: Leptos mounted successfully!');
-                leptosReady = true;
-                document.body.classList.add('leptos-loaded');
-                return true;
-            }
-            return false;
-        }
-        
-        // Start checking for Leptos mount
-        const checkInterval = setInterval(() => {
-            if (checkLeptosMount()) {
-                clearInterval(checkInterval);
-            }
-        }, 100);
-        
-        // Fallback timeout
-        setTimeout(() => {
-            if (!leptosReady) {
-                console.error('MidManStudio: Timeout waiting for Leptos to mount');
-                console.error('WASM loaded:', wasmLoaded);
-                console.error('DOM content:', document.getElementById('leptos').innerHTML);
-                
-                // Show error message
-                const loadingDiv = document.getElementById('loading');
-                if (loadingDiv) {
-                    loadingDiv.innerHTML = `
-                        <div>
-                            <h2>MidManStudio</h2>
-                            <p style="color: #ffd700;">Loading issue detected</p>
-                            <p style="font-size: 0.9rem; opacity: 0.8;">
-                                Please try refreshing the page.<br>
-                                Check browser console for details.
-                            </p>
-                        </div>
-                    `;
-                }
-            }
-            clearInterval(checkInterval);
-        }, 15000); // 15 second timeout
-        
-        // Page load handler
-        window.addEventListener('load', () => {
-            console.log('MidManStudio: Page loaded');
-            setTimeout(checkLeptosMount, 1000);
-        });
-    </script>
+    <!-- Leptos will mount here -->
 </body>
 </html>
