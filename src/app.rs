@@ -1,6 +1,7 @@
 // =============================================================================
 // src/app.rs
 use leptos::prelude::*;
+use wasm_bindgen::JsCast; // Add this import
 use crate::components::*;
 
 #[component]
@@ -143,4 +144,4 @@ pub fn App() -> impl IntoView {
             <ContactFooter />
         </div>
     }
-}
+        }
