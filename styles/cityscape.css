@@ -1,1 +1,36 @@
+/* styles/cityscape.css */
+.cityscape-layer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 40vh;
+    z-index: -5;
+    will-change: transform;
+}
+
+.buildings {
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+    width: 120%;
+}
+
+.building {
+    flex-shrink: 0;
+    background: rgba(30, 40, 50, 0.8);
+    margin: 0 2px;
+    position: relative;
+}
+
+.building-1 { width: 60px; height: 120px; }
+.building-2 { width: 80px; height: 200px; }
+.building-3 { width: 45px; height: 150px; }
+.building-4 { width: 90px; height: 180px; }
+.building-5 { width: 55px; height: 160px; }
+.building-6 { width: 70px; height: 220px; }
+.building-7 { width: 40px; height: 140px; }
+.building-8 { width: 85px; height: 190px; }
+.building-9 { width: 65px; height: 170px; }
+.building-10 { width: 50px; height: 130px; }
 
