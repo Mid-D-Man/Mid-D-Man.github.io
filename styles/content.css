@@ -1,1 +1,92 @@
+/* styles/content.css */
+.hero-content {
+    text-align: center;
+    padding: 2rem;
+}
 
+.hero-content h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: var(--accent-gold);
+    margin-bottom: 1rem;
+    font-weight: 900;
+}
+
+.services-content {
+    text-align: center;
+    padding: 2rem;
+}
+
+.services-content h2 {
+    font-size: 2.5rem;
+    color: var(--accent-gold);
+    margin-bottom: 2rem;
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.service {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.projects-content {
+    text-align: center;
+    padding: 2rem;
+}
+
+.projects-content h2 {
+    font-size: 2.5rem;
+    color: var(--accent-gold);
+    margin-bottom: 2rem;
+}
+
+.project-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.project {
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.project h3 {
+    color: var(--accent-gold);
+    margin-bottom: 1rem;
+}
+
+.about-content {
+    text-align: center;
+    padding: 2rem;
+}
+
+.about-content h2 {
+    font-size: 2.5rem;
+    color: var(--accent-gold);
+    margin-bottom: 2rem;
+}
+
+.skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.skill {
+    padding: 0.5rem 1rem;
+    background: var(--accent-gold);
+    color: var(--space-black);
+    border-radius: 20px;
+    font-weight: 600;
+}
