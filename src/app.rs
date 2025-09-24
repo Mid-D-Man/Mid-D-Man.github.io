@@ -9,11 +9,12 @@ pub fn App() -> impl IntoView {
     // Scroll effect for parallax
     Effect::new(move |_| {
         if let Some(window) = web_sys::window() {
+            let window_clone = window.clone();
             let closure = wasm_bindgen::closure::Closure::wrap(Box::new(move || {
-                let scroll_y = window.scroll_y().unwrap_or(0.0);
+                let scroll_y = window_clone.scroll_y().unwrap_or(0.0);
                 
                 // Apply parallax to background layers
-                if let Some(document) = window.document() {
+                if let Some(document) = window_clone.document() {
                     // Background parallax (slowest)
                     if let Some(bg) = document.query_selector(".parallax-background").unwrap() {
                         let _ = bg.set_attribute("style", &format!(
