@@ -1,1 +1,18 @@
+/* styles/base.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+body {
+    font-family: 'Rajdhani', sans-serif;
+    color: var(--text-light);
+    overflow-x: hidden;
+    background: var(--space-black);
+}
+
+.app {
+    position: relative;
+    min-height: 100vh;
+}
