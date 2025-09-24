@@ -1,1 +1,507 @@
+/* ===== MAIN LAYOUT STYLES ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  color: #ecf0f1;
+  line-height: 1.6;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== APP CONTAINER ===== */
+.app {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ===== BACKGROUND GRADIENT (SPACE TO SKY BLUE) ===== */
+.parallax-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -10;
+  will-change: transform;
+}
+
+.space-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    #000011 0%,           /* Deep space black at top */
+    #000033 20%,          /* Dark space */
+    #001155 40%,          /* Deep blue */
+    #4169e1 70%,          /* Royal blue */
+    #87ceeb 100%          /* Sky light blue at bottom */
+  );
+  background-attachment: fixed;
+}
+
+/* ===== CELESTIAL OBJECTS ===== */
+.celestial-objects {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+}
+
+.moon {
+  position: absolute;
+  top: 10%;
+  right: 15%;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffffff, #e8e8e8);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s infinite;
+}
+
+.star-1 { top: 15%; left: 20%; animation-delay: 0s; }
+.star-2 { top: 8%; left: 60%; animation-delay: 1s; }
+.star-3 { top: 25%; left: 80%; animation-delay: 2s; }
+.star-4 { top: 12%; left: 40%; animation-delay: 1.5s; }
+.star-5 { top: 30%; left: 10%; animation-delay: 0.5s; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* ===== CITYSCAPE LAYER ===== */
+.cityscape-layer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 300px;
+  z-index: -5;
+  will-change: transform;
+}
+
+.buildings {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  width: 120%;
+}
+
+.building {
+  flex-shrink: 0;
+  background: rgba(20, 30, 40, 0.9);
+  margin: 0 2px;
+  position: relative;
+  border-top: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.building-1 { width: 60px; height: 120px; }
+.building-2 { width: 80px; height: 200px; }
+.building-3 { width: 45px; height: 150px; }
+.building-4 { width: 90px; height: 180px; }
+.building-5 { width: 55px; height: 160px; }
+.building-6 { width: 70px; height: 220px; }
+.building-7 { width: 40px; height: 140px; }
+.building-8 { width: 85px; height: 190px; }
+.building-9 { width: 65px; height: 170px; }
+.building-10 { width: 50px; height: 130px; }
+
+/* ===== MAIN CONTENT STRUCTURE ===== */
+.main-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+/* ===== ROOM LAYOUT ===== */
+.room-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  perspective: 1200px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.room-3d {
+  position: relative;
+  width: 90%;
+  height: 80%;
+  transform-style: preserve-3d;
+  max-width: 1200px;
+}
+
+/* ===== ROOM WALLS (DIFFERENT COLORS FOR TESTING) ===== */
+
+/* Hero Room - Red walls for testing */
+#hero-room .room-3d {
+  background: rgba(139, 0, 0, 0.1); /* Dark red tint */
+}
+
+#hero-room .front-wall {
+  background: rgba(139, 0, 0, 0.3) !important;
+  border: 2px solid rgba(255, 0, 0, 0.5);
+}
+
+/* Services Room - Green walls for testing */
+#services-room .room-3d {
+  background: rgba(0, 100, 0, 0.1); /* Dark green tint */
+}
+
+#services-room .front-wall {
+  background: rgba(0, 100, 0, 0.3) !important;
+  border: 2px solid rgba(0, 255, 0, 0.5);
+}
+
+/* Projects Room - Blue walls for testing */
+#projects-room .room-3d {
+  background: rgba(0, 0, 139, 0.1); /* Dark blue tint */
+}
+
+#projects-room .front-wall {
+  background: rgba(0, 0, 139, 0.3) !important;
+  border: 2px solid rgba(0, 0, 255, 0.5);
+}
+
+/* About Room - Purple walls for testing */
+#about-room .room-3d {
+  background: rgba(128, 0, 128, 0.1); /* Dark purple tint */
+}
+
+#about-room .front-wall {
+  background: rgba(128, 0, 128, 0.3) !important;
+  border: 2px solid rgba(255, 0, 255, 0.5);
+}
+
+/* ===== INDIVIDUAL WALL STYLES ===== */
+.front-wall {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+  border-radius: 15px;
+  padding: 2rem;
+}
+
+.top-wall, .left-wall, .right-wall, .bottom-wall {
+  position: absolute;
+  background: rgba(44, 62, 80, 0.6);
+}
+
+.top-wall {
+  top: -20px;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  transform: rotateX(60deg);
+  transform-origin: bottom;
+}
+
+.bottom-wall {
+  bottom: -20px;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  transform: rotateX(-60deg);
+  transform-origin: top;
+}
+
+.left-wall {
+  left: -20px;
+  top: 0;
+  width: 40px;
+  height: 100%;
+  transform: rotateY(60deg);
+  transform-origin: right;
+}
+
+.right-wall {
+  right: -20px;
+  top: 0;
+  width: 40px;
+  height: 100%;
+  transform: rotateY(-60deg);
+  transform-origin: left;
+}
+
+/* ===== ROOM SEPARATORS ===== */
+.room-separator {
+  width: 100vw;
+  height: 100px;
+  background: linear-gradient(135deg, #1a252f, #2c3e50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.separator-decorations {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  opacity: 0.6;
+}
+
+.decoration-line {
+  width: 100px;
+  height: 1px;
+  background: #ffd700;
+}
+
+.decoration-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffd700;
+}
+
+/* ===== ROOM CONTENT ===== */
+.room-content {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  max-width: 800px;
+  color: white;
+}
+
+.hero-content h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: #ffd700;
+  margin-bottom: 1rem;
+  font-weight: 900;
+  font-family: 'Orbitron', monospace;
+}
+
+.services-content h2,
+.projects-content h2,
+.about-content h2 {
+  font-size: 2.5rem;
+  color: #ffd700;
+  margin-bottom: 2rem;
+  font-family: 'Orbitron', monospace;
+}
+
+.service-grid,
+.project-showcase {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.service,
+.project {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.skill {
+  padding: 0.5rem 1rem;
+  background: #ffd700;
+  color: #000011;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* ===== CONTACT FOOTER (SEPARATE AT BOTTOM) ===== */
+.contact-footer {
+  width: 100vw;
+  background: linear-gradient(135deg, #1a252f, #2c3e50);
+  padding: 4rem 0 2rem;
+  position: relative;
+  z-index: 10;
+  margin-top: 2rem;
+  border-top: 3px solid #ffd700;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.contact-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 3rem;
+}
+
+.contact-info h2 {
+  font-size: 2.5rem;
+  color: #ffd700;
+  margin-bottom: 1rem;
+  font-family: 'Orbitron', monospace;
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #ecf0f1;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-link:hover {
+  color: #ffd700;
+}
+
+.contact-form {
+  background: rgba(44, 62, 80, 0.7);
+  padding: 2rem;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 8px;
+  color: #ecf0f1;
+  font-family: inherit;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: rgba(236, 240, 241, 0.7);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 1rem;
+  background: #ffd700;
+  color: #000011;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Orbitron', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #e6c200;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 215, 0, 0.3);
+  opacity: 0.8;
+  font-family: 'Orbitron', monospace;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .service-grid,
+  .project-showcase {
+    grid-template-columns: 1fr;
+  }
+  
+  .moon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .room-3d {
+    width: 95%;
+    height: 85%;
+  }
+  
+  .room-content {
+    padding: 1rem;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .services-content h2,
+  .projects-content h2,
+  .about-content h2 {
+    font-size: 2rem;
+  }
+}
