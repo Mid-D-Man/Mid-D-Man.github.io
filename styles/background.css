@@ -1,1 +1,71 @@
+/* styles/background.css */
+.parallax-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 500vh;
+    z-index: -10;
+    will-change: transform;
+}
 
+.space-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        var(--space-black) 0%,
+        var(--deep-space) 20%,
+        var(--earth-blue) 100%
+    );
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+.celestial-objects {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.moon {
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffffff, #e8e8e8);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.stars {
+    position: absolute;
+    width: 100%;
+    height: 40%;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+.star-1 { top: 15%; left: 20%; animation-delay: 0s; }
+.star-2 { top: 8%; left: 60%; animation-delay: 1s; }
+.star-3 { top: 25%; left: 80%; animation-delay: 2s; }
+.star-4 { top: 12%; left: 40%; animation-delay: 1.5s; }
+.star-5 { top: 30%; left: 10%; animation-delay: 0.5s; }
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
