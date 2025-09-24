@@ -1,5 +1,4 @@
 // src/lib.rs - Main library entry point for Leptos CSR
-use leptos::prelude::*;
 use wasm_bindgen::prelude::*;
 
 pub mod app;
