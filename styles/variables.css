@@ -1,1 +1,14 @@
+/* styles/variables.css */
+:root {
+    --space-black: #000011;
+    --deep-space: #000033;
+    --earth-blue: #4169e1;
+    --room-wall: #2c3e50;
+    --room-wall-alt: #34495e;
+    --floor-wood: #8b4513;
+    --tech-floor: #1a252f;
+    --accent-gold: #ffd700;
+    --text-light: #ecf0f1;
+    --separator-dark: #1a252f;
+}
 
