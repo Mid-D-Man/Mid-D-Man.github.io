@@ -1,3 +1,31 @@
+/* ===== CSS VARIABLES ===== */
+:root {
+  /* Space Gradient Colors */
+  --space-black: #000011;
+  --deep-space: #000033;
+  --dark-blue: #001155;
+  --royal-blue: #4169e1;
+  --sky-blue: #87ceeb;
+  
+  /* Accent Colors */
+  --gold: #ffd700;
+  --light-gold: #e6c200;
+  
+  /* Room Colors (for testing) */
+  --room-red: rgba(139, 0, 0, 0.3);
+  --room-green: rgba(0, 100, 0, 0.3);
+  --room-blue: rgba(0, 0, 139, 0.3);
+  --room-purple: rgba(128, 0, 128, 0.3);
+  
+  /* Text Colors */
+  --text-light: #ecf0f1;
+  --text-dark: #000011;
+  
+  /* Background Colors */
+  --separator-bg: linear-gradient(135deg, #1a252f, #2c3e50);
+  --contact-bg: linear-gradient(135deg, #1a252f, #2c3e50);
+}
+
 /* ===== MAIN LAYOUT STYLES ===== */
 * {
   margin: 0;
@@ -504,4 +532,4 @@ body {
   .about-content h2 {
     font-size: 2rem;
   }
-}
+  }
