@@ -2,9 +2,11 @@
 .room-container {
     position: relative;
     width: 100vw;
-    height: 100vh;
+    height: 80vh;
     perspective: 1000px;
     overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 .room-3d {
