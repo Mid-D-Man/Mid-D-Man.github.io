@@ -1,18 +1,132 @@
 /* MidManStudio Responsive Styles */
 
-/* styles/responsive.css */
-@media (max-width: 768px) {
+/* ===== MOBILE FIRST APPROACH ===== */
+
+/* Extra Small Devices (Portrait Phones, less than 576px) */
+@media (max-width: 575.98px) {
+    /* Layout adjustments */
+    .room-container {
+        height: 60vh;
+        padding: 1rem;
+    }
+    
+    .room-3d {
+        width: 100%;
+        height: 90%;
+    }
+    
+    .room-separator {
+        height: 10vh;
+    }
+    
+    /* Content scaling */
+    .hero-content h1 {
+        font-size: 2rem !important;
+        margin-bottom: 0.5rem;
+    }
+    
+    .services-content h2,
+    .projects-content h2,
+    .about-content h2 {
+        font-size: 1.8rem !important;
+        margin-bottom: 1rem;
+    }
+    
+    /* Grid adjustments */
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .service-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .project-showcase {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .skills {
+        gap: 0.5rem;
+    }
+    
+    .skill {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Background elements */
+    .moon {
+        width: 40px;
+        height: 40px;
+        top: 8%;
+        right: 10%;
+    }
+    
+    .buildings {
+        transform: scale(0.6);
+        transform-origin: bottom left;
+    }
+    
+    /* Room content padding */
+    .room-content {
+        padding: 1rem;
+        max-width: 100%;
+    }
+    
+    /* Form adjustments */
+    .contact-form {
+        padding: 1.5rem;
+    }
+    
+    .contact-form input,
+    .contact-form textarea {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+    
+    .submit-btn {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Small Devices (Landscape Phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .room-container {
+        height: 65vh;
+        padding: 1rem;
+    }
+    
+    .room-separator {
+        height: 12vh;
+    }
+    
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .services-content h2,
+    .projects-content h2,
+    .about-content h2 {
+        font-size: 2rem;
+    }
+    
     .contact-content {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
     
     .service-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
     }
     
     .project-showcase {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
     
     .moon {
@@ -20,11 +134,219 @@
         height: 60px;
     }
     
-    .building {
+    .buildings {
+        transform: scale(0.7);
+        transform-origin: bottom left;
+    }
+}
+
+/* Medium Devices (Tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .room-container {
+        height: 70vh;
+        padding: 1.5rem;
+    }
+    
+    .room-separator {
+        height: 15vh;
+    }
+    
+    .hero-content h1 {
+        font-size: 3rem;
+    }
+    
+    .services-content h2,
+    .projects-content h2,
+    .about-content h2 {
+        font-size: 2.2rem;
+    }
+    
+    .contact-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+    }
+    
+    .service-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+    
+    .project-showcase {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+    
+    .moon {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .buildings {
         transform: scale(0.8);
+        transform-origin: bottom left;
+    }
+    
+    .room-content {
+        padding: 1.5rem;
+    }
+}
+
+/* Large Devices (Desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .room-container {
+        height: 75vh;
+        padding: 2rem;
+    }
+    
+    .room-separator {
+        height: 18vh;
+    }
+    
+    .hero-content h1 {
+        font-size: 3.5rem;
+    }
+    
+    .services-content h2,
+    .projects-content h2,
+    .about-content h2 {
+        font-size: 2.4rem;
+    }
+    
+    .service-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .project-showcase {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .moon {
+        width: 75px;
+        height: 75px;
+    }
+    
+    .buildings {
+        transform: scale(0.9);
+    }
+}
+
+/* Extra Large Devices (Large Desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .room-container {
+        height: 80vh;
+        padding: 2rem;
+    }
+    
+    .room-separator {
+        height: 20vh;
+    }
+    
+    .hero-content h1 {
+        font-size: 4rem;
+    }
+    
+    .services-content h2,
+    .projects-content h2,
+    .about-content h2 {
+        font-size: 2.5rem;
+    }
+    
+    .service-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .project-showcase {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .moon {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .buildings {
+        transform: scale(1);
+    }
+}
+
+/* ===== LANDSCAPE ORIENTATION FIXES ===== */
+@media (orientation: landscape) and (max-height: 500px) {
+    .room-container {
+        height: 90vh;
+    }
+    
+    .room-separator {
+        height: 10vh;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .services-content h2,
+    .projects-content h2,
+    .about-content h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
     }
     
     .room-content {
         padding: 1rem;
     }
 }
+
+/* ===== ACCESSIBILITY AND PERFORMANCE ===== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .parallax-background,
+    .cityscape-layer {
+        transform: none !important;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .front-wall {
+        border-width: 3px !important;
+    }
+    
+    .service,
+    .project {
+        border-width: 2px !important;
+    }
+}
+
+/* ===== TOUCH DEVICE OPTIMIZATIONS ===== */
+@media (hover: none) and (pointer: coarse) {
+    /* Increase touch targets */
+    .contact-link,
+    .submit-btn,
+    .skill {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Remove hover effects that don't work on touch */
+    .contact-link:hover,
+    .submit-btn:hover {
+        transform: none;
+    }
+    
+    /* Better spacing for touch */
+    .skills {
+        gap: 1rem;
+    }
+    
+    .service-grid,
+    .project-showcase {
+        gap: 1.5rem;
+    }
+        }
