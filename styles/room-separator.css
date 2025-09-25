@@ -1,13 +1,15 @@
 /* styles/room-separator.css */
 .room-separator {
     width: 100vw;
-    height: 80px;
+    height: 20vh;
     background: var(--separator-dark);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     z-index: 2;
+    margin: 0;
+    padding: 0;
 }
 
 .separator-content {
@@ -42,4 +44,3 @@
     border-radius: 50%;
     background: var(--accent-gold);
 }
-
