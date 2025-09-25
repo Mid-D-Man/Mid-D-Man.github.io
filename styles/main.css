@@ -1,15 +1,4 @@
-/* styles/main.css - Main stylesheet that imports all component stylesheets */
-
-/* Import order matters for cascading */
-@import 'variables.css';
-@import 'base.css'; 
-@import 'background.css';
-@import 'cityscape.css';
-@import 'room.css';
-@import 'room-walls.css';
-@import 'room-separator.css';
-@import 'content.css';
-@import 'contact-footer.css';
+/* styles/main.css - Global layout fixes and overrides */
 
 /* Global layout fixes */
 html, body {
@@ -25,7 +14,7 @@ html, body {
   position: relative;
 }
 
-/* Mobile-first responsive base */
+/* Main content wrapper */
 .main-content {
   width: 100%;
   position: relative;
