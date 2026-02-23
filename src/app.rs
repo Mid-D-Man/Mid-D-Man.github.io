@@ -2,6 +2,7 @@
 // src/app.rs
 use leptos::prelude::*;
 use wasm_bindgen::JsCast;
+use js_sys::Array;
 use crate::components::portfolio::*;
 
 #[component]
@@ -40,24 +41,21 @@ pub fn App() -> impl IntoView {
 }
 
 fn setup_scroll_reveal(document: &web_sys::Document) {
-    use js_sys::Object;
-    use wasm_bindgen::JsValue;
-
-    // Build IntersectionObserver options
+    // Build IntersectionObserver options via js_sys
     let options = js_sys::Object::new();
     let _ = js_sys::Reflect::set(
         &options,
-        &JsValue::from_str("threshold"),
-        &JsValue::from_f64(0.12),
+        &wasm_bindgen::JsValue::from_str("threshold"),
+        &wasm_bindgen::JsValue::from_f64(0.12),
     );
     let _ = js_sys::Reflect::set(
         &options,
-        &JsValue::from_str("rootMargin"),
-        &JsValue::from_str("0px 0px -60px 0px"),
+        &wasm_bindgen::JsValue::from_str("rootMargin"),
+        &wasm_bindgen::JsValue::from_str("0px 0px -60px 0px"),
     );
 
     let callback = wasm_bindgen::closure::Closure::wrap(Box::new(
-        move |entries: js_sys::Array, _observer: web_sys::IntersectionObserver| {
+        move |entries: Array, _observer: web_sys::IntersectionObserver| {
             for entry_val in entries.iter() {
                 let entry: web_sys::IntersectionObserverEntry =
                     entry_val.unchecked_into();
@@ -68,20 +66,21 @@ fn setup_scroll_reveal(document: &web_sys::Document) {
                 }
             }
         },
-    )
-        as Box<dyn Fn(js_sys::Array, web_sys::IntersectionObserver)>);
+    ) as Box<dyn Fn(Array, web_sys::IntersectionObserver)>);
+
+    let options_init: web_sys::IntersectionObserverInit = options.unchecked_into();
 
     if let Ok(observer) = web_sys::IntersectionObserver::new_with_options(
         callback.as_ref().unchecked_ref(),
-        &options.unchecked_into(),
+        &options_init,
     ) {
-        // Observe all reveal elements
         let selectors = [
             ".reveal", ".reveal-left", ".reveal-right", ".reveal-up",
         ];
         for sel in &selectors {
             if let Ok(nodes) = document.query_selector_all(sel) {
-                for i in 0..nodes.length() {
+                let len = nodes.length();
+                for i in 0..len {
                     if let Some(node) = nodes.get(i) {
                         let el: web_sys::Element = node.unchecked_into();
                         observer.observe(&el);
@@ -89,7 +88,6 @@ fn setup_scroll_reveal(document: &web_sys::Document) {
                 }
             }
         }
-        // Keep observer alive
         std::mem::forget(observer);
     }
     callback.forget();
