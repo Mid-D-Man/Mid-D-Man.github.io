@@ -1,9 +1,14 @@
 // =============================================================================
 // src/components/portfolio/services.rs
 use leptos::prelude::*;
+use crate::components::portfolio::icons::*;
+
+// Service icon enum so we can pass them cleanly
+#[derive(Clone, Copy)]
+enum ServiceIcon { Gamepad, Globe, Terminal, Pen }
 
 struct ServiceData {
-    icon: &'static str,
+    icon: ServiceIcon,
     title: &'static str,
     tagline: &'static str,
     description: &'static str,
@@ -15,7 +20,7 @@ struct ServiceData {
 pub fn Services() -> impl IntoView {
     let services = vec![
         ServiceData {
-            icon: "🎮",
+            icon: ServiceIcon::Gamepad,
             title: "Game Development",
             tagline: "Primary Expertise",
             description: "End-to-end Unity game development — from concept and game design through to polished, shippable builds. Mobile, PC, and WebGL targets.",
@@ -23,7 +28,7 @@ pub fn Services() -> impl IntoView {
             accent: "crimson",
         },
         ServiceData {
-            icon: "🌐",
+            icon: ServiceIcon::Globe,
             title: "Web Development",
             tagline: "Full-Stack",
             description: "Modern web applications with a unique edge — including Rust/WASM frontends with Leptos, .NET Blazor, and JavaScript frameworks.",
@@ -31,7 +36,7 @@ pub fn Services() -> impl IntoView {
             accent: "blue",
         },
         ServiceData {
-            icon: "💻",
+            icon: ServiceIcon::Terminal,
             title: "Software Development",
             tagline: "Systems & Apps",
             description: "Robust desktop and backend software. From attendance systems to productivity tools — reliable, well-architected, and maintainable.",
@@ -39,7 +44,7 @@ pub fn Services() -> impl IntoView {
             accent: "cyan",
         },
         ServiceData {
-            icon: "🎨",
+            icon: ServiceIcon::Pen,
             title: "Digital Art",
             tagline: "Visual Creation",
             description: "Game assets, concept art, UI design, and illustrations. Crafting visuals that serve the product — from quick icons to detailed character work.",
@@ -56,17 +61,22 @@ pub fn Services() -> impl IntoView {
                     <span>"02 — Services"</span>
                 </div>
 
-                <h2 class="section-title reveal">
-                    "What I Build"
-                </h2>
+                <h2 class="section-title reveal">"What I Build"</h2>
 
                 <div class="services-grid">
                     {services.into_iter().enumerate().map(|(i, s)| {
+                        let icon_view = match s.icon {
+                            ServiceIcon::Gamepad  => view! { <IconGamepad  class="service-icon-svg" /> }.into_any(),
+                            ServiceIcon::Globe    => view! { <IconGlobe    class="service-icon-svg" /> }.into_any(),
+                            ServiceIcon::Terminal => view! { <IconTerminal class="service-icon-svg" /> }.into_any(),
+                            ServiceIcon::Pen      => view! { <IconPen      class="service-icon-svg" /> }.into_any(),
+                        };
                         view! {
-                            <div
-                                class=format!("service-card service-card--{} reveal-up delay-{}", s.accent, i)
-                            >
-                                <div class="service-icon">{s.icon}</div>
+                            <div class=format!(
+                                "service-card service-card--{} reveal-up delay-{}",
+                                s.accent, i
+                            )>
+                                <div class="service-icon-wrap">{icon_view}</div>
                                 <div class="service-tagline">{s.tagline}</div>
                                 <h3 class="service-title">{s.title}</h3>
                                 <p class="service-desc">{s.description}</p>
@@ -82,4 +92,4 @@ pub fn Services() -> impl IntoView {
             </div>
         </section>
     }
-  }
+                        }
