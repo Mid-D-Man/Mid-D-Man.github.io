@@ -26,7 +26,7 @@ pub fn Nav() -> impl IntoView {
     let close_menu = move || set_menu_open.set(false);
 
     view! {
-        // Overlay — sits behind drawer, closes menu on tap
+        // Overlay — closes drawer on tap outside
         <div
             class=move || if menu_open.get() { "nav-overlay active" } else { "nav-overlay" }
             on:click=move |_| close_menu()
@@ -36,16 +36,15 @@ pub fn Nav() -> impl IntoView {
             if scrolled.get() { "portfolio-nav scrolled" } else { "portfolio-nav" }
         }>
             <div class="nav-inner">
-                // Logo
+                // Logo — MidManStudio_Logo_Two.png from sharedPublic/
                 <a href="#hero" class="nav-logo-link" on:click=move |_| close_menu()>
-                    // PNG logo from sharedPublic — swap filename if different
                     <img
-                        src="sharedPublic/midmanstudio-logo-nobg.png"
-                        alt="MidManStudio Logo"
+                        src="sharedPublic/MidManStudio_Logo_Two.png"
+                        alt="MidManStudio"
                         class="nav-logo-img"
-                        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+                        onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
                     />
-                    // SVG fallback (shown if PNG fails to load)
+                    // SVG fallback shown if PNG fails
                     <svg
                         class="nav-logo-svg"
                         style="display:none"
@@ -76,13 +75,13 @@ pub fn Nav() -> impl IntoView {
 
                 // Desktop links
                 <ul class="nav-links">
-                    <li><a href="#about" class="nav-link">"About"</a></li>
+                    <li><a href="#about"    class="nav-link">"About"</a></li>
                     <li><a href="#services" class="nav-link">"Services"</a></li>
                     <li><a href="#projects" class="nav-link">"Projects"</a></li>
-                    <li><a href="#contact" class="nav-link nav-cta">"Contact"</a></li>
+                    <li><a href="#contact"  class="nav-link nav-cta">"Contact"</a></li>
                 </ul>
 
-                // Burger button — BurgerMenu.razor animation ported to Leptos
+                // Burger — BurgerMenu.razor animation
                 <button
                     class=move || {
                         if menu_open.get() { "nav-hamburger open" } else { "nav-hamburger" }
@@ -102,7 +101,7 @@ pub fn Nav() -> impl IntoView {
                 if menu_open.get() { "nav-drawer open" } else { "nav-drawer" }
             }>
                 <ul class="drawer-links">
-                    <li><a href="#about"   class="drawer-link" on:click=move |_| close_menu()>"About"</a></li>
+                    <li><a href="#about"    class="drawer-link" on:click=move |_| close_menu()>"About"</a></li>
                     <li><a href="#services" class="drawer-link" on:click=move |_| close_menu()>"Services"</a></li>
                     <li><a href="#projects" class="drawer-link" on:click=move |_| close_menu()>"Projects"</a></li>
                     <li><a href="#contact"  class="drawer-link drawer-cta" on:click=move |_| close_menu()>"Contact"</a></li>
@@ -110,4 +109,4 @@ pub fn Nav() -> impl IntoView {
             </div>
         </nav>
     }
-}
+    }
