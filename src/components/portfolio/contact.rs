@@ -2,20 +2,17 @@
 // src/components/portfolio/contact.rs
 use leptos::prelude::*;
 use wasm_bindgen::JsCast;
+use crate::components::portfolio::icons::*;
 
 #[component]
 pub fn Contact() -> impl IntoView {
-    let (name, set_name) = signal(String::new());
-    let (email, set_email) = signal(String::new());
+    let (name, set_name)       = signal(String::new());
+    let (email, set_email)     = signal(String::new());
     let (message, set_message) = signal(String::new());
-    let (status, set_status) = signal(FormStatus::Idle);
+    let (status, set_status)   = signal(FormStatus::Idle);
 
     #[derive(Clone, PartialEq)]
-    enum FormStatus {
-        Idle,
-        Sending,
-        Success,
-    }
+    enum FormStatus { Idle, Sending, Success }
 
     let handle_submit = move |ev: web_sys::SubmitEvent| {
         ev.prevent_default();
@@ -23,31 +20,30 @@ pub fn Contact() -> impl IntoView {
         set_status.set(FormStatus::Sending);
 
         let window = web_sys::window().unwrap();
-        let set_status_clone = set_status.clone();
-        let set_name_clone = set_name.clone();
-        let set_email_clone = set_email.clone();
-        let set_message_clone = set_message.clone();
+        let set_status_clone  = set_status.clone();
+        let set_name_clone    = set_name.clone();
+        let set_email_clone   = set_email.clone();
+        let set_msg_clone     = set_message.clone();
 
         let closure = wasm_bindgen::closure::Closure::wrap(Box::new(move || {
             set_status_clone.set(FormStatus::Success);
             set_name_clone.set(String::new());
             set_email_clone.set(String::new());
-            set_message_clone.set(String::new());
+            set_msg_clone.set(String::new());
 
             let set_s = set_status_clone.clone();
             let reset = wasm_bindgen::closure::Closure::wrap(Box::new(move || {
                 set_s.set(FormStatus::Idle);
             }) as Box<dyn Fn()>);
-            let _ = web_sys::window().unwrap().set_timeout_with_callback_and_timeout_and_arguments_0(
-                reset.as_ref().unchecked_ref(),
-                4000,
-            );
+            let _ = web_sys::window().unwrap()
+                .set_timeout_with_callback_and_timeout_and_arguments_0(
+                    reset.as_ref().unchecked_ref(), 4000,
+                );
             reset.forget();
         }) as Box<dyn Fn()>);
 
         let _ = window.set_timeout_with_callback_and_timeout_and_arguments_0(
-            closure.as_ref().unchecked_ref(),
-            1800,
+            closure.as_ref().unchecked_ref(), 1800,
         );
         closure.forget();
     };
@@ -60,7 +56,9 @@ pub fn Contact() -> impl IntoView {
                     <span>"04 — Contact"</span>
                 </div>
 
-                <h2 class="section-title reveal">"Let's Build"<br/><em>"Something Real"</em></h2>
+                <h2 class="section-title reveal">
+                    "Let's Build"<br/><em>"Something Real"</em>
+                </h2>
 
                 <div class="contact-grid">
                     // Left: Info + Socials
@@ -72,7 +70,7 @@ pub fn Contact() -> impl IntoView {
 
                         <div class="contact-direct">
                             <a href="mailto:contact@midmanstudio.com" class="contact-email">
-                                <span class="contact-email-icon">"📧"</span>
+                                <IconMail class="contact-email-icon-svg" />
                                 "contact@midmanstudio.com"
                             </a>
                         </div>
@@ -82,21 +80,21 @@ pub fn Contact() -> impl IntoView {
                             <div class="socials-list">
                                 <SocialLink
                                     href="https://github.com/mid-d-man"
-                                    icon="⚡"
                                     label="GitHub"
                                     handle="mid-d-man"
+                                    icon_type="github"
                                 />
                                 <SocialLink
                                     href="https://linkedin.com/company/MidManStudio"
-                                    icon="💼"
                                     label="LinkedIn"
                                     handle="MidManStudio"
+                                    icon_type="linkedin"
                                 />
                                 <SocialLink
                                     href="https://mid-d-man.github.io"
-                                    icon="🌐"
                                     label="Portfolio"
                                     handle="mid-d-man.github.io"
+                                    icon_type="globe"
                                 />
                             </div>
                         </div>
@@ -117,7 +115,9 @@ pub fn Contact() -> impl IntoView {
                             {move || if status.get() == FormStatus::Success {
                                 view! {
                                     <div class="form-success-msg">
-                                        <span class="success-icon">"✓"</span>
+                                        <span class="success-icon-wrap">
+                                            <IconCheck class="success-icon-svg" />
+                                        </span>
                                         <p>"Message sent! I'll be in touch soon."</p>
                                     </div>
                                 }.into_any()
@@ -204,18 +204,19 @@ pub fn Contact() -> impl IntoView {
 #[component]
 fn SocialLink(
     href: &'static str,
-    icon: &'static str,
     label: &'static str,
     handle: &'static str,
+    icon_type: &'static str,
 ) -> impl IntoView {
+    let icon = match icon_type {
+        "github"   => view! { <IconGitHub  class="social-icon-svg" /> }.into_any(),
+        "linkedin" => view! { <IconLinkedIn class="social-icon-svg" /> }.into_any(),
+        _          => view! { <IconGlobe   class="social-icon-svg" /> }.into_any(),
+    };
+
     view! {
-        <a
-            href=href
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-link"
-        >
-            <span class="social-icon">{icon}</span>
+        <a href=href target="_blank" rel="noopener noreferrer" class="social-link">
+            <span class="social-icon-wrap">{icon}</span>
             <div class="social-text">
                 <span class="social-label">{label}</span>
                 <span class="social-handle">{handle}</span>
@@ -223,4 +224,4 @@ fn SocialLink(
             <span class="social-arrow">"↗"</span>
         </a>
     }
-                                                             }
+                                        }
