@@ -942,10 +942,79 @@ a {
 .service-card--gold:hover { border-color: rgba(255, 215, 0, 0.3); }
 .service-card--gold:hover::before { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
 
-.service-icon {
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
-  display: block;
+/* ── SVG Icon System ─────────────────────────────────────────── */
+.detail-icon-svg {
+  width: 16px; height: 16px;
+  display: block; flex-shrink: 0;
+  color: var(--cobalt-light);
+}
+
+.service-icon-svg   { width: 28px; height: 28px; display: block; color: currentColor; }
+.contact-email-icon-svg { width: 18px; height: 18px; display: block; color: var(--cyan-neon); }
+.social-icon-svg    { width: 18px; height: 18px; display: block; color: var(--cobalt-light); transition: color 0.25s; }
+.success-icon-svg   { width: 26px; height: 26px; display: block; color: var(--cyan-neon); }
+
+.social-link:hover .social-icon-svg { color: var(--text-primary); }
+
+/* Service icon wrapper — replaces emoji */
+.service-icon-wrap {
+  width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--cobalt-faint);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  margin-bottom: 1.2rem;
+  color: var(--cobalt-light);
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.service-card:hover .service-icon-wrap {
+  background: rgba(65,105,225,0.15);
+  border-color: var(--border-active);
+  color: var(--cyan-neon);
+}
+.service-card--crimson:hover .service-icon-wrap {
+  background: var(--crimson-faint);
+  border-color: rgba(220,20,60,0.3);
+  color: var(--crimson);
+}
+.service-card--gold:hover .service-icon-wrap {
+  background: rgba(255,215,0,0.08);
+  border-color: rgba(255,215,0,0.25);
+  color: var(--gold);
+}
+
+/* Social icon wrapper */
+.social-icon-wrap {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  background: var(--cobalt-faint);
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  transition: background 0.3s, border-color 0.3s;
+}
+.social-link:hover .social-icon-wrap {
+  background: rgba(65,105,225,0.15);
+  border-color: var(--border-active);
+}
+
+/* Contact email row */
+.contact-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Form success icon */
+.success-icon-wrap {
+  display: flex; align-items: center; justify-content: center;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--cobalt-faint);
+  border: 2px solid var(--cobalt-light);
+  box-shadow: var(--glow-cyan);
+  animation: pop-in 0.5s var(--ease-spring);
 }
 
 .service-tagline {
@@ -1297,11 +1366,6 @@ a {
   transform: translateX(4px);
 }
 
-.social-icon {
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
 .social-text {
   flex: 1;
   display: flex;
@@ -1431,21 +1495,6 @@ a {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-}
-
-.success-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--cobalt-faint);
-  border: 2px solid var(--cobalt-light);
-  font-size: 1.5rem;
-  color: var(--cyan-neon);
-  box-shadow: var(--glow-cyan);
-  animation: pop-in 0.5s var(--ease-spring);
 }
 
 .form-success-msg p {
@@ -1654,4 +1703,4 @@ a {
     opacity: 1;
     transform: none;
   }
-     }
+}
