@@ -1,6 +1,7 @@
 // =============================================================================
 // src/components/portfolio/about.rs
 use leptos::prelude::*;
+use crate::components::portfolio::icons::*;
 
 #[component]
 pub fn About() -> impl IntoView {
@@ -36,15 +37,15 @@ pub fn About() -> impl IntoView {
 
                         <div class="about-details">
                             <div class="detail-item">
-                                <span class="detail-icon">"📍"</span>
+                                <IconPin class="detail-icon-svg" />
                                 <span>"Nigeria"</span>
                             </div>
                             <div class="detail-item">
-                                <span class="detail-icon">"🎮"</span>
+                                <IconGamepad class="detail-icon-svg" />
                                 <span>"Game Dev — Primary Focus"</span>
                             </div>
                             <div class="detail-item">
-                                <span class="detail-icon">"⚡"</span>
+                                <IconZap class="detail-icon-svg" />
                                 <span>"Open to Collaborations"</span>
                             </div>
                         </div>
@@ -55,7 +56,7 @@ pub fn About() -> impl IntoView {
                         // Stats row
                         <div class="stats-row">
                             <div class="stat-card">
-                                <span class="stat-number">"4+"</span>
+                                <span class="stat-number">"8+"</span>
                                 <span class="stat-label">"Years Building"</span>
                             </div>
                             <div class="stat-card">
@@ -105,4 +106,4 @@ fn SkillPill(label: &'static str, level: u32) -> impl IntoView {
             </div>
         </div>
     }
-  }
+    }
