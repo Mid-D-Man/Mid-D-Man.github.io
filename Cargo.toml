@@ -3,31 +3,39 @@ name = "midmanstudio"
 version = "0.1.0"
 edition = "2021"
 
-# IMPORTANT: For Leptos CSR with Trunk, we need ONLY a library target
-# Remove any binary configuration entirely
-
 [lib]
 crate-type = ["cdylib"]
-
-# CRITICAL: No [[bin]] sections at all for CSR
 
 [dependencies]
 leptos = { version = "0.8", features = ["csr", "nightly"] }
 console_error_panic_hook = "0.1"
 wasm-bindgen = "0.2"
+js-sys = "0.3"
+
 web-sys = { version = "0.3", features = [
+  # Console / window
   "console",
   "Window",
   "Document",
   "Element",
   "HtmlElement",
+  # Events
   "EventTarget",
   "MouseEvent",
   "KeyboardEvent",
   "SubmitEvent",
+  # Scroll
   "ScrollIntoViewOptions",
   "ScrollBehavior",
   "ScrollToOptions",
+  # DOM queries
+  "NodeList",
+  # IntersectionObserver (scroll-reveal)
+  "IntersectionObserver",
+  "IntersectionObserverEntry",
+  "IntersectionObserverInit",
+  # DomTokenList (classList)
+  "DomTokenList",
 ] }
 
 [profile.release]
