@@ -1,4 +1,5 @@
 // src/components/portfolio/mod.rs
+pub mod icons;
 pub mod logo;
 pub mod nav;
 pub mod hero;
@@ -7,6 +8,7 @@ pub mod services;
 pub mod projects;
 pub mod contact;
 
+pub use icons::*;
 pub use logo::*;
 pub use nav::*;
 pub use hero::*;
