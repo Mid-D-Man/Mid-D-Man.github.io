@@ -78,6 +78,8 @@ pub fn About() -> impl IntoView {
                                 <SkillPill label="Rust" level=75 />
                                 <SkillPill label="Leptos / WASM" level=72 />
                                 <SkillPill label="Blazor / .NET" level=80 />
+                                <SkillPill label="Svelte" level=78 />
+                                <SkillPill label="Tauri" level=70 />
                                 <SkillPill label="JavaScript" level=78 />
                                 <SkillPill label="Digital Art" level=85 />
                                 <SkillPill label="UI / UX" level=80 />
