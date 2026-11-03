@@ -63,16 +63,17 @@
   <img src="https://img.shields.io/badge/Unity-000000?style=for-the-badge&logo=unity&logoColor=white" alt="Unity" />
   <img src="https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white" alt="C#" />
   <img src="https://img.shields.io/badge/Unity%20Cloud-000000?style=for-the-badge&logo=unity&logoColor=white" alt="Unity Cloud" />
+  <img src="https://img.shields.io/badge/raylib-000000?style=for-the-badge" alt="raylib" />
 </p>
 
 ### Programming Languages
 <p>
-  <img src="https://skillicons.dev/icons?i=cs,cpp,rust,js,html,css&perline=6&theme=dark" alt="Programming Languages" />
+  <img src="https://skillicons.dev/icons?i=c,cpp,cs,rust,js,html,css&perline=7&theme=dark" alt="Programming Languages" />
 </p>
 
 ### Frameworks & Libraries
 <p>
-  <img src="https://skillicons.dev/icons?i=dotnet,blazor,react,nodejs&perline=4&theme=dark" alt="Frameworks" />
+  <img src="https://skillicons.dev/icons?i=dotnet,blazor,react,nodejs,tauri&perline=5&theme=dark" alt="Frameworks" />
 </p>
 
 ### Creative & Development Tools

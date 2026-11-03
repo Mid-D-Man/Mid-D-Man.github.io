@@ -786,6 +786,55 @@ a {
   font-size: 1rem;
 }
 
+/* About figure */
+.about-figure {
+  margin: 2.2rem 0 0;
+  max-width: 300px;
+}
+
+.about-figure-frame {
+  position: relative;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-surface);
+  box-shadow: var(--card-shadow);
+  transition: border-color 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+}
+
+.about-figure-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(4, 8, 18, 0.5));
+  pointer-events: none;
+}
+
+.about-figure:hover .about-figure-frame {
+  border-color: var(--border-glow);
+  box-shadow: var(--glow-cobalt);
+}
+
+.about-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.about-figure-caption {
+  margin-top: 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.about-figure-caption::before {
+  content: "// ";
+  color: var(--cyan-neon);
+}
+
 /* Stats */
 .stats-row {
   display: grid;

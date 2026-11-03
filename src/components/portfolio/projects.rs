@@ -82,7 +82,7 @@ pub fn Projects() -> impl IntoView {
         ProjectData {
             number: "06",
             title: "MSX",
-            subtitle: "MidStroke eXchange — Vector Graphics",
+            subtitle: "MidStroke eXtension — Vector Graphics",
             description: "A vector graphics rendering format with a custom binary format and DixScript source, applying Grease Pencil-derived rendering patterns — dual-buffer OIT compositing, ping-pong FBOs, SMAA, Halton-sequence supersampling. Core rendering pipeline already working.",
             tech: &["Rust", "Rendering", "Vector Graphics", "Binary Format"],
             link: "https://github.com/Mid-D-Man/msx",
@@ -94,7 +94,7 @@ pub fn Projects() -> impl IntoView {
             number: "07",
             title: "MidManStudio Unity",
             subtitle: "Unity Package Monorepo",
-            description: "Centralized development and maintenance for MidMan Studio's Unity packages — utilities and netcode are code-complete, with a projectile-simulation package (native Rust SIMD core via FFI) still in progress.",
+            description: "Centralized development and maintenance for MidMan Studio's Unity packages — utilities and netcode are code-complete, with audio, patterns, and a projectile-simulation package (native Rust core via FFI) still in progress.",
             tech: &["Unity", "C#", "Rust", "FFI"],
             link: "https://github.com/MidManStudio/MidManStudio_Unity",
             link_label: "GitHub",
