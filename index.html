@@ -7,11 +7,19 @@
     <meta name="description" content="Mid-D-Man, founder of MidManStudio. Game developer, software engineer, and digital artist bridging vision and reality.">
     <meta name="author" content="Abdulhamid Manman Suleiman / MidManStudio">
 
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
     <!-- Open Graph -->
     <meta property="og:title" content="Mid-D-Man — MidManStudio" />
     <meta property="og:description" content="Game developer, software engineer, and digital artist." />
     <meta property="og:url" content="https://mid-d-man.github.io" />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://mid-d-man.github.io/images/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,6 +34,11 @@
 
     <!-- Static images served as-is (Trunk only copies what is declared here) -->
     <link data-trunk rel="copy-file" href="images/wizard.jpg" data-target-path="images" />
+    <link data-trunk rel="copy-file" href="images/logo-mark.png" data-target-path="images" />
+    <link data-trunk rel="copy-file" href="images/logo-wordmark.png" data-target-path="images" />
+    <link data-trunk rel="copy-file" href="images/favicon.png" data-target-path="images" />
+    <link data-trunk rel="copy-file" href="images/apple-touch-icon.png" data-target-path="images" />
+    <link data-trunk rel="copy-file" href="images/og-image.png" data-target-path="images" />
 
     <!-- Inline fallback: dark bg while WASM loads -->
     <style>
@@ -43,6 +56,9 @@
             background: #040812; z-index: 9999;
             gap: 1.5rem;
             font-family: 'Orbitron', monospace;
+        }
+        .wasm-loading-img {
+            width: min(200px, 50vw); height: auto; border-radius: 12px;
         }
         .wasm-loading-logo {
             font-size: 1.4rem; font-weight: 700;
@@ -73,6 +89,7 @@
 </head>
 <body>
     <div class="wasm-loading" id="wasm-loading">
+        <img class="wasm-loading-img" src="images/logo-wordmark.png" width="200" height="200" alt="MidManStudio">
         <div class="wasm-loading-logo">Mid-D-Man <span>/ MidManStudio</span></div>
         <div class="wasm-loading-bar"><div class="wasm-loading-bar-fill"></div></div>
         <div class="wasm-loading-text">Loading WASM</div>

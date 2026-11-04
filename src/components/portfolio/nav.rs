@@ -36,10 +36,10 @@ pub fn Nav() -> impl IntoView {
             if scrolled.get() { "portfolio-nav scrolled" } else { "portfolio-nav" }
         }>
             <div class="nav-inner">
-                // Logo — MidManStudio_Logo_Two.png from sharedPublic/
+                // Logo — cube icon (images/logo-mark.png, shipped via Trunk copy-file in index.html)
                 <a href="#hero" class="nav-logo-link" on:click=move |_| close_menu()>
                     <img
-                        src="sharedPublic/MidManStudio_Logo_Two.png"
+                        src="images/logo-mark.png"
                         alt="MidManStudio"
                         class="nav-logo-img"
                         onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
