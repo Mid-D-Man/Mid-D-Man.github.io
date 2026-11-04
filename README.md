@@ -196,6 +196,17 @@
 
 ---
 
+## <div align="center">🚀 Deployment 🚀</div>
+
+Every push to `main` builds the site once with Trunk and publishes the same `dist/` to two places:
+
+- **GitHub Pages** at `https://mid-d-man.github.io`
+- **Cloudflare Pages**, project `mid-d-man` (`https://mid-d-man.pages.dev`), created automatically on the first run
+
+The Cloudflare step needs two repository secrets: `CLOUDFLARE_API_TOKEN` (permission: Account, Cloudflare Pages, Edit) and `CLOUDFLARE_ACCOUNT_ID`. Without them that step is skipped with a warning and GitHub Pages still deploys. The workflow is `.github/workflows/deploy.yml`.
+
+---
+
 ## <div align="center">💬 Let's Bridge the Gap Together 💬</div>
 
 <div align="center">
