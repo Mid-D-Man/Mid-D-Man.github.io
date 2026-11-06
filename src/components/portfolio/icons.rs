@@ -113,6 +113,33 @@ pub fn IconLinkedIn(#[prop(default = "icon-svg")] class: &'static str) -> impl I
     }
 }
 
+/// Telegram / Paper plane
+#[component]
+pub fn IconTelegram(#[prop(default = "icon-svg")] class: &'static str) -> impl IntoView {
+    view! {
+        <svg class=class viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+    }
+}
+
+/// Discord / Chat bubble
+#[component]
+pub fn IconDiscord(#[prop(default = "icon-svg")] class: &'static str) -> impl IntoView {
+    view! {
+        <svg class=class viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/>
+            <circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+    }
+}
+
 /// GitHub / Code brackets
 #[component]
 pub fn IconGitHub(#[prop(default = "icon-svg")] class: &'static str) -> impl IntoView {

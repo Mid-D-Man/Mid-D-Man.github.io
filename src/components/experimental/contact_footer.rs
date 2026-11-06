@@ -39,9 +39,9 @@ pub fn ContactFooter() -> impl IntoView {
                         <h2>"Get In Touch"</h2>
                         <p>"Ready to bridge the gap between your vision and reality?"</p>
                         <div class="contact-links">
-                            <a href="mailto:contact@midmanstudio.com" class="contact-link">
+                            <a href="mailto:midmanstudio@proton.me" class="contact-link">
                                 <span class="icon">"📧"</span>
-                                "contact@midmanstudio.com"
+                                "midmanstudio@proton.me"
                             </a>
                             <a href="https://github.com/mid-d-man" target="_blank" class="contact-link">
                                 <span class="icon">"⚡"</span>

@@ -69,9 +69,9 @@ pub fn Contact() -> impl IntoView {
                         </p>
 
                         <div class="contact-direct">
-                            <a href="mailto:contact@midmanstudio.com" class="contact-email">
+                            <a href="mailto:midmanstudio@proton.me" class="contact-email">
                                 <IconMail class="contact-email-icon-svg" />
-                                "contact@midmanstudio.com"
+                                "midmanstudio@proton.me"
                             </a>
                         </div>
 
@@ -83,6 +83,18 @@ pub fn Contact() -> impl IntoView {
                                     label="GitHub"
                                     handle="mid-d-man"
                                     icon_type="github"
+                                />
+                                <SocialLink
+                                    href="https://t.me/midmanstudio"
+                                    label="Telegram"
+                                    handle="@midmanstudio"
+                                    icon_type="telegram"
+                                />
+                                <SocialLink
+                                    href="https://discord.gg/vtxVx4XNU"
+                                    label="Discord"
+                                    handle="discord.gg/vtxVx4XNU"
+                                    icon_type="discord"
                                 />
                                 <SocialLink
                                     href="https://linkedin.com/company/MidManStudio"
@@ -211,6 +223,8 @@ fn SocialLink(
     let icon = match icon_type {
         "github"   => view! { <IconGitHub  class="social-icon-svg" /> }.into_any(),
         "linkedin" => view! { <IconLinkedIn class="social-icon-svg" /> }.into_any(),
+        "telegram" => view! { <IconTelegram class="social-icon-svg" /> }.into_any(),
+        "discord"  => view! { <IconDiscord  class="social-icon-svg" /> }.into_any(),
         _          => view! { <IconGlobe   class="social-icon-svg" /> }.into_any(),
     };
 
