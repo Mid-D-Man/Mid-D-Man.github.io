@@ -49,18 +49,6 @@ pub fn About() -> impl IntoView {
                                 <span>"Open to Collaborations"</span>
                             </div>
                         </div>
-
-                        <figure class="about-figure reveal-up">
-                            <div class="about-figure-frame">
-                                <img
-                                    src="images/wizard.jpg"
-                                    alt="Black-and-white image of a long-bearded wizard holding a fan of dollar bills in one hand and a sword in the other"
-                                    width="473"
-                                    height="422"
-                                />
-                            </div>
-                            <figcaption class="about-figure-caption">"Patron saint of freelancers"</figcaption>
-                        </figure>
                     </div>
 
                     // Right: Skills + Stats

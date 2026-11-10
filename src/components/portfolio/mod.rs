@@ -7,6 +7,7 @@ pub mod about;
 pub mod services;
 pub mod projects;
 pub mod contact;
+pub mod wizard;
 
 pub use icons::*;
 pub use logo::*;
@@ -16,3 +17,4 @@ pub use about::*;
 pub use services::*;
 pub use projects::*;
 pub use contact::*;
+pub use wizard::*;

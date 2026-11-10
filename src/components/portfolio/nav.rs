@@ -2,11 +2,14 @@
 // src/components/portfolio/nav.rs
 use leptos::prelude::*;
 use wasm_bindgen::JsCast;
+use crate::components::portfolio::wizard::WizardViewer;
 
 #[component]
 pub fn Nav() -> impl IntoView {
     let (menu_open, set_menu_open) = signal(false);
     let (scrolled, set_scrolled) = signal(false);
+    // The hidden "patron saint" viewer: opened by clicking the logo
+    let (wizard_open, set_wizard_open) = signal(false);
 
     Effect::new(move |_| {
         if let Some(window) = web_sys::window() {
@@ -26,6 +29,8 @@ pub fn Nav() -> impl IntoView {
     let close_menu = move || set_menu_open.set(false);
 
     view! {
+        <WizardViewer open=wizard_open set_open=set_wizard_open />
+
         // Overlay — closes drawer on tap outside
         <div
             class=move || if menu_open.get() { "nav-overlay active" } else { "nav-overlay" }
@@ -37,7 +42,15 @@ pub fn Nav() -> impl IntoView {
         }>
             <div class="nav-inner">
                 // Logo — cube icon (images/logo-mark.png, shipped via Trunk copy-file in index.html)
-                <a href="#hero" class="nav-logo-link" on:click=move |_| close_menu()>
+                <a
+                    href="#hero"
+                    class="nav-logo-link"
+                    on:click=move |ev: web_sys::MouseEvent| {
+                        ev.prevent_default();
+                        close_menu();
+                        set_wizard_open.set(true);
+                    }
+                >
                     <img
                         src="images/logo-mark.png"
                         alt="MidManStudio"

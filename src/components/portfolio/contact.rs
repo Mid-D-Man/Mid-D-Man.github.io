@@ -204,10 +204,6 @@ pub fn Contact() -> impl IntoView {
                     <span class="footer-studio">"MidManStudio"</span>
                 </div>
                 <p class="footer-copy">"© 2025 MidManStudio. All rights reserved."</p>
-                <p class="footer-built">
-                    "Built with Rust + Leptos — compiled to WebAssembly"
-                    <span class="footer-crimson">" ◆"</span>
-                </p>
             </div>
         </footer>
     }
