@@ -16,4 +16,6 @@
 
   overrides::
     target("README.md", "README.md")
+    target("Cargo.toml", "Cargo.toml")
+    target("index.html", "index.html")
 )
