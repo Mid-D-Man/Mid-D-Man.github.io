@@ -13,7 +13,7 @@ pub fn main() {
     console_error_panic_hook::set_once();
     
     // Log startup
-    web_sys::console::log_1(&"MidManStudio: Starting Leptos CSR...".into());
+    web_sys::console::log_1(&"MidManStudio: starting".into());
     
     // Mount the app to the document body
     leptos::mount::mount_to_body(App);

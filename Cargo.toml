@@ -24,6 +24,8 @@ web-sys = { version = "0.3", features = [
   "MouseEvent",
   "KeyboardEvent",
   "SubmitEvent",
+  # XMLHttpRequest (the contact form)
+  "XmlHttpRequest",
   # Scroll
   "ScrollIntoViewOptions",
   "ScrollBehavior",

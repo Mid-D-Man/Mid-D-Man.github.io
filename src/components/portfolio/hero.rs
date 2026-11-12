@@ -62,7 +62,7 @@ pub fn Hero() -> impl IntoView {
                 <span class="float-tag tag-1">"Unity"</span>
                 <span class="float-tag tag-2">"Rust"</span>
                 <span class="float-tag tag-3">"C#"</span>
-                <span class="float-tag tag-4">"Leptos"</span>
+                <span class="float-tag tag-4">"TypeScript"</span>
                 <span class="float-tag tag-5">"WASM"</span>
                 <span class="float-tag tag-6">"Blazor"</span>
             </div>

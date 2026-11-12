@@ -103,17 +103,6 @@ pub fn Projects() -> impl IntoView {
         },
         ProjectData {
             number: "08",
-            title: "MidManStudio Portfolio",
-            subtitle: "This Site",
-            description: "Built entirely in Rust — compiled to WebAssembly with Leptos 0.8, deployed via GitHub Actions. A real production site, not a demo.",
-            tech: &["Rust", "Leptos 0.8", "WASM", "Trunk", "GitHub Actions"],
-            link: "https://github.com/mid-d-man/Mid-D-Man.github.io",
-            link_label: "Source",
-            status: ProjectStatus::Featured,
-            category: "Web Dev",
-        },
-        ProjectData {
-            number: "09",
             title: "Unity Game Projects",
             subtitle: "Interactive Experiences",
             description: "A collection of Unity-powered games and interactive prototypes — from mobile casual to WebGL. Game design, art, and code all in one.",

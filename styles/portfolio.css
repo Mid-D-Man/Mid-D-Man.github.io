@@ -1551,6 +1551,32 @@ a {
   font-size: 0.95rem;
 }
 
+.form-error-msg {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  background: var(--crimson-faint);
+  border: 1px solid var(--crimson-glow);
+  border-radius: 8px;
+}
+
+.form-error-msg a {
+  color: var(--cyan-neon);
+  text-decoration: underline;
+}
+
+/* the honeypot: off screen, not hidden with display:none, so bots still fill it */
+.form-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
 @keyframes pop-in {
   0%   { transform: scale(0); }
   80%  { transform: scale(1.1); }
